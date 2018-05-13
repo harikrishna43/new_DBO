@@ -1,0 +1,138 @@
+﻿@model IEnumerable<DBO.Data.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "Employments";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<h2>Employments</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Company.Name)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @if (item.Company != null)
+                {
+                    @Html.DisplayFor(modelItem => item.Company.Name)
+                }
+            </td>
+            <td>
+                @{ 
+                    var companyId = item.Company == null ? -1 : item.Company.Id;
+                    var companyName = item.Company == null ? "" : item.Company.Name;
+                 }
+                <a href="" onclick="openUpdateModal('@item.UserName', '@companyId', '@companyName'); return false;">Update employment</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            @using (Html.BeginForm("UpdateEmployment", "Companies", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+
+                    <h4 class="modal-title">Update Employment</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>Employee</label>
+                        <div class="col-md-10">
+                            <input type="text" readonly name="username" id="username" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Companies</label>
+                        <div class="col-md-10">
+                            <select id="companies-dropdown" name="companies" class="form-control"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default">Update</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+    <script>
+        $(function () {
+            $('#myModal').on('hidden.bs.modal', function () {
+                $('#companies-dropdown').empty();
+            });
+            $('#companies-dropdown').on('select2:select', function (e) {
+                var data = e.params.data;
+                console.log(data);
+            });
+        });
+        function openUpdateModal(username, companyId, companyName) {
+            var nCompany = parseInt(companyId);
+            if (nCompany > -1) {
+                $('#companies-dropdown').append($("<option></option>").attr("value", nCompany).text(companyName)); 
+            }
+
+            $('#companies-dropdown').select2({
+                minimumInputLength: 0,
+                allowClear: true,
+                width: '100%',
+                placeholder: 'Company name',
+                ajax: {
+                    url: '@Url.Action("CompanySelect2", "Companies")',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        var req = {
+                            pageSize: 20,
+                            page: params.page ? params.page : 1,
+                            term: params.term ? params.term : '',
+                        };
+
+                        return req;
+                    },
+                    processResults: function (data, params) {
+                        var page = params.page ? params.page : 1;
+                        var more = (page * 20) < data.TotalCount;
+                        return {
+                            results: data.Items,
+                            pagination: {
+                                more: more
+                            }
+                        };
+                    },
+                    cache: true,
+                }
+            });
+
+            $('#username').val(username);
+            $('#myModal').modal('show');
+        }
+    </script>
+}

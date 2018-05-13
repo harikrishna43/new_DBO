@@ -1,0 +1,58 @@
+﻿@using DBO.Data.Models
+@model IEnumerable<DBO.Data.Models.ClaimRequest>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+@*<h2>Index</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+<table class="table">
+    <tr>
+        <th>
+            @ResourceString.Instance.Name
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            @ResourceString.Instance.RequestTime
+        </th>
+        <th>
+            @ResourceString.Instance.ClaimStatus
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Company.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClaimStatus)
+            </td>
+            <td>
+                @if (item.ClaimStatus == ClaimStatus.Created)
+                {
+                    <span>
+                        @Html.ActionLink("Approve", "Approve", new { id = item.Id }) |
+                        @Html.ActionLink("Reject", "Reject", new { id = item.Id })
+                    </span>
+                }
+            </td>
+        </tr>
+    }
+
+</table>

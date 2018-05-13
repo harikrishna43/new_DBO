@@ -1,0 +1,257 @@
+﻿@model  IEnumerable<DBO.Data.ViewModels.NewsViewModel>
+@using DBO.Extensions
+
+@{
+    Layout = "~/Views/Shared/_Layout_Search.cshtml";
+}
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/company-details.css" rel="stylesheet" />
+
+<div class="container company-details">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="box box__small d-lg-flex align-items-lg-center h100">
+                <div class="box__connections box__connections__small">
+                    <span>23</span>
+                    connections
+                </div>
+
+                <img src="/img/logo.jpeg" class="img-fluid" />
+            </div>
+
+            <div class="box box__small d-lg-flex align-items-lg-center h100">
+                <div class="box__connections box__connections__small">
+                    <span>20</span>
+                    connections
+                </div>
+
+                <img src="/img/logo.jpeg" class="img-fluid" />
+            </div>
+
+            <div class="box box__small d-lg-flex align-items-lg-center h100">
+                <div class="box__connections box__connections__small">
+                    <span>23</span>
+                    connections
+                </div>
+
+                <img src="/img/logo.jpeg" class="img-fluid" />
+            </div>
+
+            <div class="box box__small d-lg-flex align-items-lg-center h100">
+                <div class="box__connections box__connections__small">
+                    <span>20</span>
+                    connections
+                </div>
+
+                <img src="/img/logo.jpeg" class="img-fluid" />
+            </div>
+
+
+
+        </div>
+        <div class="col-lg-6 col-xs-12">
+            @if (ViewBag.CanWriteNewsfeed == true)
+            {
+                using (Html.BeginForm("CreateNews", "News", new { redirectAction = "NewsFeed", redirectController = "Home" }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
+                    <div class="card add-article" style="margin-bottom:20px;">
+                        <div class="card-header headexr">
+                            @ResourceString.Instance.WriteTo @ViewBag.CompanyName
+                        </div>
+                        <div class="card-block body">
+                            <input required type="text" placeholder="@ResourceString.Instance.Title" name="Title" style="width: 100%;
+                                                                                        border: none;
+                                                                                        padding-top: 10px;
+                                                                                        padding-left: 30px;
+                                                                                        width:90%;
+                                                                                        display:none" />
+                            <hr style="margin:10px 0px 10px 20px; width:90%; display:none" />
+                            <textarea required placeholder="@ResourceString.Instance.WriteVisit" rows="2" name="Content" id="Content"></textarea>
+                            <div class="col-md-12">
+                                <button type="button" onclick="$('#file').click()" class="btn btn-default" style="display:none">@ResourceString.Instance.SelectImage</button>
+                                <label id="imageName"></label>
+                                <input type="file" name="file" id="file" accept="image/*" placeholder="Add image" style="font-size:11px;display:none;" />
+                                <button class="btn btn-success pull-right" style="margin-bottom:10px;">@ResourceString.Instance.Send</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+
+
+            @foreach (var news in Model)
+            {
+                <div class="container__news news" id="news_@news.Id">
+                    <div class="box box__news">
+                        <div class="">
+                            <div class="box__headline">
+                                @if (!string.IsNullOrEmpty(news.Company.Image))
+                                {
+                                    <img src="~/img/CompanyLogos/@news.Company.Image" />
+                                    <span class="news__date">@news.CreatedAt</span>
+                                }
+                                else
+                                {
+                                    <span class="new__date pull-right">@news.CreatedAt.ToString("ddd dd-MM-yyyy hh:mm")</span>
+                                    <p class="">@news.Company.Name</p>
+
+                                }
+                            </div>
+
+                            <h4 style="display:block">@news.Title</h4>
+                            <div class="">
+                                @if (news.IsLargeNews)
+                                {
+                                    <p class="short-content-@news.Id">
+                                        @news.ShortContent ...
+                                        <br />
+                                        <a class="news__readmore btn btn-green btn-sm btn-no-radius" href="#" onclick="readMore(this); return false;" data-news-id="@news.Id">@ResourceString.Instance.ReadMoreLink </a>
+                                    </p>
+                                    <p class="news-content full-content-@news.Id" style="display:none;">
+                                        @news.Content
+                                        @if (!string.IsNullOrEmpty(news.ImagePath))
+                                        {
+                                            <div style="width:100%">
+                                                <img src="/NewsImages/@news.ImagePath" />
+                                            </div>
+                                        }
+                                        @*<p class="news-signature">
+                                                @news.Company.Name
+                                            </p>*@
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p>
+                                        @news.Content
+                                    </p>
+                                    if (!string.IsNullOrEmpty(news.ImagePath))
+                                    {
+                                        <img src="/NewsImages/@news.ImagePath" class="img-fluid" />
+                                    }
+                                    @*<p class="news-signature">
+                                            @news.Company.Name
+                                        </p>*@
+                                }
+                            </div>
+
+                            <div class="news__stats">
+                                <p>
+                                    <span class="views">@news.Views @ResourceString.Instance.Views</span> &middot; <span id="comments" style="cursor: pointer;" onclick="showComments(this)" data-news-id="@news.Id">@news.Comments.Count @ResourceString.Instance.Comments</span>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    @foreach (var comment in news.Comments)
+                    {
+                        <div class="box box__comment comment-@news.Id" id="comment_@(comment.NewsId)_@(comment.Id)">
+                            <div class="">
+                                <p>
+                                    <span class="pull-right" style="font-size:11px;">@comment.CreatedAt.ToShortDateString()</span>
+                                    <br />
+                                    @comment.Content
+                                </p>
+                                <p class="news-signature">
+                                    @if (comment.User.Company != null)
+                                    {
+                                        <span>
+                                            @comment.User.Company.Name@*,  @comment.User.UserName*@
+                                        </span>
+
+                                    }
+                                    else
+                                    {
+                                        @comment.User.UserName
+                                    }
+                                </p>
+
+                            </div>
+                        </div>
+                    }
+
+                    @if ((!string.IsNullOrEmpty(User.GetClaimValue("Id")) || User.IsInRole("Admin")) && news.IsCommentAllowed)
+                    {
+                        <div class="card comment-form">
+                            <div class="card-block">
+                                @using (Html.BeginForm("AddComment", "News", new { companyId = news.CompanyId }, FormMethod.Post))
+                                {
+                                    <input type="hidden" name="NewsId" value="@news.Id" />
+                                    <input type="hidden" name="CompanyId" value="@news.CompanyId" />
+                                    @Html.AntiForgeryToken()
+                                    <textarea data-autoresize placeholder="@ResourceString.Instance.LeaveAComment" style="resize:none" name="content" rows="1" required onkeypress="return postOnEnter(event, this)"></textarea>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            @if (ViewBag.HasMoreResults)
+            {
+                <div class="col-xs-12">
+                    <button class="btn btn-default" id="load-more" style="margin-left:43%;">@ResourceString.Instance.LoadMore</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/Companies/news.js"></script>
+    <script>
+        $(function () {
+            let pageNumber = 1;
+            $('#load-more').click(function () {
+                loadMore(pageNumber++);
+            });
+        });
+
+        function loadMore(pageNumber) {
+            let baseUrl = '/Home/ReadMoreNews';
+            $.ajax({
+                url: baseUrl.concat('?pageNumber=', pageNumber),
+                success: function (response, status, xhr) {
+                    $('.news-section').append(response);
+                    let hasMoreResults = xhr.getResponseHeader('X-HasMoreResults');
+
+                    if (hasMoreResults === 'false') {
+                        $('#load-more').parent().hide();
+                    }
+                }
+            });
+        }
+
+        function parseCurrentUrlToGetComment() {
+            var divByParts = [];
+            var currentLocation = window.location.href;
+            var divPart = currentLocation.split("#");
+            if (divPart.length == 2) {
+                var typeOfDiv = divPart[1].split("_");
+                var typePart = typeOfDiv[0];
+                var newsIdPart = typeOfDiv[1];
+                var commentIdPart = typeOfDiv[2];
+                divByParts = [typePart, newsIdPart, commentIdPart];
+            }
+            return divByParts;
+        }
+
+        $(document).ready(function () {
+            var parsedDiv = parseCurrentUrlToGetComment();
+            if (parsedDiv.length == 3) {
+                var type = parsedDiv[0];
+                if (type === "comment") {
+                    var newsId = parsedDiv[1];
+                    var comment = $("#comment_" + parsedDiv[2]);
+                    $('.comment-' + newsId).toggle();
+                    $('html,body').animate({
+                        scrollTop: comment.offset().top
+                    }, 'slow');
+                }
+            }
+        });
+    </script>
+}

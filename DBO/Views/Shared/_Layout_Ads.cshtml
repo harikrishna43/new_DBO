@@ -1,0 +1,85 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="background-color: #fff;">
+    <div class="container" style="padding: 0px;">
+        <div class="text-right">
+            @Html.Partial("_MenuPartial")
+        </div>
+    </div>
+</div>
+
+<section class="section-cards">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 d-none d-lg-block">
+
+                <div class="card-white pad p-3 pl-4" style="min-height: 541px">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem sed maiores, dicta nostrum. Fugiat aliquam, impedit facilis, libero fugit repellat, aut earum fuga neque dolorem est aperiam laborum dolorum numquam.</p>
+                </div>
+
+                <div class="card-white pad p-3 pl-4" style="min-height: 541px">
+                    @Html.Action("DisplayAds", "Ads")
+                </div>
+
+            </div>
+            <div class="col-lg-6">
+                <div id="companies-section">
+                    @RenderBody()
+                </div>
+            </div>
+            <div class="col-lg-3 d-none d-lg-block">
+
+                <div class="row">
+                    <div class="col-sm-4 col-lg-12">
+                        <div class="card-white pb-3">
+                            <div class="gray pl-2"><small>@((string)ResourceString.Instance.Announce.ToUpper())</small></div>
+                            <img src="~/img/img-1.png" alt="">
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-lg-12">
+                        <div class="card-white pb-3">
+                            <div class="gray pl-2"><small>@((string)ResourceString.Instance.Announce.ToUpper())</small></div>
+                            <img src="~/img/img-2.png" alt="">
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-lg-12">
+                        <div class="card-white pb-3">
+                            <div class="gray pl-2"><small>@((string)ResourceString.Instance.Announce.ToUpper())</small></div>
+                            <img src="~/img/img-3.png" alt="">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-google">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-md-3 mb-3">
+                <a href="#"><img src="/img/google-1.png" alt=""></a>
+            </div>
+            <div class="col-sm-6 col-md-3 mb-3">
+                <a href="#"><img src="/img/google-2.png" alt=""></a>
+            </div>
+            <div class="col-sm-6 col-md-3 mb-3">
+                <a href="#"><img src="/img/google-3.png" alt=""></a>
+            </div>
+            <div class="col-sm-6 col-md-3 mb-3">
+                <a href="#"><img src="/img/google-4.png" alt=""></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-text">
+    <div class="container">
+        <h3><i>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit distinctio obcaecati blanditiis explicabo modi asperiores ea, quae, excepturi unde voluptatum quam iusto ratione quos, culpa, similique vero consectetur facere quo!</i></h3>
+    </div>
+</section>
+
+@RenderSection("scripts", required: false)

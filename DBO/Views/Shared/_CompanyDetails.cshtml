@@ -1,0 +1,112 @@
+﻿@using DBO.Common
+@model DBO.Data.ViewModels.CompanyViewModel
+@{
+    var companyLogos = Constants.CompanyLogosPath.Trim('~');
+}
+
+<div class="box__top">
+    <div class="company-logo">
+        @if (!string.IsNullOrEmpty(Model.Image))
+        {
+            <img src="@companyLogos@Model.Image" alt="@Model.Name" class="img-fluid" />
+        }
+        else
+        {
+            <p style="text-align:center">@Model.Name</p>
+        }
+    </div>
+    @if (Model.Skills.Any())
+    {
+        <div class="box__skills">
+            <div class="title-strikethrough">@ResourceString.Instance.Skills</div>
+            <ul class="list-unstyled list-inline">
+                @foreach (var skill in Model.Skills)
+                {
+                    <li class="list-inline-item">@skill.Skill.Name</li>
+                }
+            </ul>
+        </div>
+    }
+    <hr />
+    <div class="box__connections__company">
+        <span>@Model.ApprovedConnections.Count</span>
+        <p>@ResourceString.Instance.Connections</p>
+        <p style="font-size: 0.8em;text-transform: none;">
+            <span style="font-size:1em;">@Model.Followers</span>
+            @ResourceString.Instance.Following @Model.Name
+        </p>
+    </div>
+    <div class="box__map">
+        @if (!string.IsNullOrEmpty(Model.Address))
+        {
+            <div class="google-maps">
+                <iframe src="https://www.google.com/maps/embed/v1/place?key=@ViewBag.GoogleMapsApiKey&q=@ViewBag.AddressForGoogleApi" frameborder="0" style="border:0"></iframe>
+            </div>
+        }
+    </div>
+
+    <div class="box__bottom">
+        <table class="box__contact">
+            <tbody>
+                @if (!string.IsNullOrEmpty(Model.Address1) && !string.IsNullOrEmpty(Model.Address2))
+                {
+                    <tr>
+                        <td valign="top">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                        </td>
+                        <td>
+                            @Model.Address1<br />
+                            @Model.Address2<br />
+                        </td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(Model.Web))
+                {
+                    <tr>
+                        <td>
+                            <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                        </td>
+                        <td>
+                            <div><a href="@Model.Web" target="_blank">@Model.Web</a></div>
+                        </td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(Model.Phone))
+                {
+                    <tr>
+                        <td>
+                            <i class="fa fa-phone" aria-hidden="true"></i>
+                        </td>
+                        <td>
+                            <div>@Model.Phone</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <i class="fa fa-mobile-phone" style="margin-left:3px" aria-hidden="true"></i>
+                        </td>
+                        <td>
+                            <div><a href="tel:@Model.Phone">@ResourceString.Instance.SendToYourPhone</a></div>
+                        </td>
+                    </tr>
+                }
+                @*<tr>
+                        <td></td>
+                        <td>
+                            <div><a href="http://@Model.Web">@Model.Web</a></div>
+                        </td>
+                    </tr>*@
+            </tbody>
+        </table>
+    </div>
+</div>
+@Html.Action("DisplayAds", "Ads", new { viewName = "DisplayAds_Left" })
+<div class="d-none">
+    <a href="#"><img src="/img/google-1.png" alt=""></a>
+</div>
+<div class="d-none">
+    <a href="#"><img src="/img/google-2.png" alt=""></a>
+</div>
+<div class="d-none">
+    <a href="#"><img src="/img/google-3.png" alt=""></a>
+</div>

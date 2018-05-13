@@ -1,0 +1,179 @@
+﻿@model DBO.Data.ViewModels.EmployeeViewModel
+<style>
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+
+    #img-upload {
+        width: 100%;
+    }
+</style>
+<div class="modal-content">
+    <div class="modal-header">
+        @if (ViewBag.IsUpdate == true)
+        {
+            <h5 class="modal-title" id="exampleModalLabel">@(String.Format((string)ResourceString.Instance.UpdateAnEmployee, Model.CompanyName))</h5>
+        }
+        else
+        {
+            <h5 class="modal-title" id="exampleModalLabel">@(String.Format((string)ResourceString.Instance.CreateAnEmployee, Model.CompanyName))</h5>
+        }
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        @if (TempData.ContainsKey("Error"))
+        {
+            <div class="row alert alert-danger alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                @{
+                    var errors = TempData["Error"] as IEnumerable<string>;
+                }
+                @foreach (var error in errors)
+                {
+                    <p>@error</p>
+                }
+            </div>
+        }
+        <form class="form-horizontal">
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="Name">@ResourceString.Instance.Name:</label>
+                <div class="col-sm-6">
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger", style = "font-size:12px;" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="Email">@ResourceString.Instance.Email:</label>
+                <div class="col-sm-6">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
+                    @Html.ValidationMessageFor(m => m.Email, null, new { @class = "text-danger", style = "font-size:12px;" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="Title">@ResourceString.Instance.Title:</label>
+                <div class="col-sm-6">
+                    @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger", style = "font-size:12px;" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <input type="hidden" id="file-hidden" name="FilePath" />
+                @Html.HiddenFor(m => m.FilePath, new { id = "file-hidden" })
+                <label class="control-label col-sm-2">@ResourceString.Instance.Image:</label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <span class="btn btn-primary btn-file">
+                                @ResourceString.Instance.Browse… <input type="file" accept="image/*" id="file-input">
+                            </span>
+                        </span>
+                        <input type="text" class="form-control" readonly>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.FilePath, null, new { @class = "text-danger", style = "font-size:12px;" })
+                    <img id='img-upload' />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">@ResourceString.Instance.Close</button>
+        <button type="button" id="createEmployee" class="btn btn-primary">@ResourceString.Instance.Save</button>
+    </div>
+</div>
+<script>
+    var image = document.getElementById("img-upload");
+    var imageHidden = document.getElementById("file-hidden");
+
+
+    $(document).ready(function () {
+
+        image.src = '@Model.FilePath';
+        imageHidden.value = '@Model.FilePath';
+
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [label]);
+        });
+
+        $('.btn-file :file').on('fileselect', function (event, label) {
+            var input = $(this).parents('.input-group').find(':text'),
+                log = label;
+            if (input.length) {
+                input.val(log);
+            } else {
+                if (log) alert(log);
+            }
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var file = input.files[0];
+                var blobUrl = URL.createObjectURL(file);
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    image.src = e.target.result;
+                    imageHidden.value = e.target.result;
+                }
+
+                reader.readAsDataURL(file);
+            }
+        }
+
+        $("#file-input").change(function () {
+            readURL(this);
+        });
+
+        $("#createEmployee").on("click", function () {
+            $.ajax({
+                type: "POST",
+                url: "@ViewBag.IsUpdate" === "True" ? "/Employees/Update/" : "/Employees/Create/",
+                data: {
+                    id: "@Model.Id",
+                    companyId: "@Model.CompanyId",
+                    companyName: "@Model.CompanyName",
+                    name: $("#Name").val(),
+                    email: $("#Email").val(),
+                    title: $("#Title").val(),
+                    filePath: $("#file-hidden").val(),
+                },
+                success: function (data) {
+                    if (data.Success == true) {
+                            $.ajax({
+                                url: "/Employees/List",
+                                type: "GET",
+                                data: { companyId: "@Model.CompanyId" },
+                                success: function (data) {
+                                    $("#employees-list").html(data);
+                                    $('#employeeModal').modal('toggle');
+                                }
+                            });
+                        }
+                        else {
+                            $("#employeeModal_body").html(data);
+                        }
+                }
+            })
+        });
+    });
+</script>

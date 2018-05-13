@@ -1,0 +1,29 @@
+﻿@{
+    var ads = (ViewBag.Ads as IEnumerable<DBO.Data.ViewModels.DisplayAdViewModel>).Take(8);
+}
+
+@foreach (var item in ads)
+{
+    if (item.Type == DBO.Data.Models.AdvertisementType.Image)
+    {
+        <div class="col-sm-3">
+            <div class="gray pl-2"><small>ANNOUNCE</small></div>
+            <a href="/ads/open/@item.Id" style="float:left">
+                <img src="@item.FilePath" width="250" height="150" alt="">
+            </a>
+            <p class="ml-2" style="padding:0;margin:0;"><strong>@item.Headline</strong></p>
+            <p class="ml-2" style="font-size:12px;padding:0;margin:0;">@item.Text</p>
+        </div>
+    }
+    else
+    {
+        <div class="col-sm-3" style="padding:15px;width:320px;">
+            <div class="gray pl-2"><small>ANNOUNCE</small></div>
+            <a href="/ads/open/@item.Id" style="float:left">
+                <video style="background-color:transparent; width:255px; height:auto;" muted loop autoplay src="@item.FilePath" class="video-js"></video>
+            </a>
+            <p class="ml-2" style="padding:0;margin:0;"><strong>@item.Headline</strong></p>
+            <p class="ml-2" style="font-size:12px;padding:0;margin:0;">@item.Text</p>
+        </div>
+    }
+}

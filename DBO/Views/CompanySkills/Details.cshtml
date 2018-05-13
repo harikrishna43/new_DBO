@@ -1,0 +1,35 @@
+﻿@model DBO.Data.Models.CompanySkill
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<h2>@ResourceString.Instance.Details</h2>
+
+<div>
+    <h4>@ResourceString.Instance.Company @ResourceString.Instance.Skill.ToLower()</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Company.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Company.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Skill.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Skill.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink((string)ResourceString.Instance.BackToList, "Index")
+</p>

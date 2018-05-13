@@ -1,0 +1,49 @@
+﻿@model IEnumerable<DBO.Data.Models.CompanySkill>
+
+@{
+    var skillItems = ViewBag.Skills as IEnumerable<DBO.Data.Models.Skill>;
+    Func<string, bool> isAction = action =>
+    {
+        var actionName = this.ViewContext.RouteData.Values["action"].ToString();
+        return action != null && string.Equals(action, actionName, StringComparison.OrdinalIgnoreCase);
+    };
+}
+
+@foreach (var skill in Model)
+{
+
+    <div class="col-auto" id="@skill.Skill.Id">
+        <div class="badge badge-primary">
+            <div class="form-row flex-nowrap align-items-center">
+                <div class="col-auto">@skill.Skill.Name</div>
+                <div class="col-auto">
+                    <div class="badge-close" data-skill-id="@skill.Skill.Id" data-skill-name="@skill.Skill.Name">X</div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="col-auto col-md-12 col-sm-12">
+    <a href="#" class="link-blue toggle-skills pull-right">@ResourceString.Instance.AddMore</a>
+    <br />
+    <div class="textBox" style="display:none;">
+
+        <select id="skills" class="form-control skill-name col-md-8">
+            @if (skillItems != null)
+            {
+                foreach (var skill in skillItems)
+                {
+                    <option value="@skill.Id">@skill.Name</option>
+                }
+            }
+        </select>
+        @if (!isAction("BasicData"))
+        {
+            <div class="form-group" style=" margin-top:15px;">
+                <input type="text" id="new-skill-name" class="form-control col-md-8" style="float:left;margin-right:15px" />
+                <button type="button" class="btn btn-success btn-block col-md-3 col-md-offset-1 create-skill">@ResourceString.Instance.Create</button>
+            </div>
+        }
+    </div>
+</div>

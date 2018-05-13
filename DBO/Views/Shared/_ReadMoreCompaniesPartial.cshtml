@@ -1,0 +1,27 @@
+﻿@model IEnumerable<DBO.Data.ViewModels.CompanyViewModel>
+
+@foreach (var company in Model)
+{
+    <div class="card-white pad">
+        <div class="float-right text-center light">
+            <div class="h4 mb-0 green light">@company.Connections</div>
+            <small class="gray">CONNECTIONS</small>
+        </div>
+        <h5 class="mb-0">@company.Name</h5>
+        <div>@company.Address1</div>
+        <div>@company.Address2</div>
+        <div>Tif.: @company.Phone</div>
+        <div class="text-right">
+            @{
+                if (company.Image != null)
+                {
+                    <img src="~/@company.Image">
+                }
+                else
+                {
+                    <div class="gray light">@company.TextDescription</div>
+                }
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,44 @@
+﻿@model DBO.Data.ViewModels.ClaimingViewModel
+
+
+<link href="~/Content/company-details.css" rel="stylesheet" />
+
+<div id="registration-form">
+
+    @using (Ajax.BeginForm("ClaimCompanyReferal", "Business", new { partialName = "_ClaimCompanyReferal" }, new AjaxOptions
+    {
+        UpdateTargetId = "registration-form",
+        HttpMethod = "POST"
+    }, new { @class = "form -horizontal col-sm-12 revision-form" }))
+    {
+        if (ViewBag.SuccessMessage != null)
+        {
+            <p class="text-success success-message" style="font-size:0.8em">@ViewBag.SuccessMessage</p>
+        }
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Company.Name)
+        @Html.HiddenFor(model => model.Company.PostCode)
+        @Html.HiddenFor(model => model.Company.Id)
+        @Html.HiddenFor(model => model.Company.Phone)
+        @Html.HiddenFor(model => model.Company.City)
+        @Html.HiddenFor(model => model.Company.Email)
+        @Html.HiddenFor(model => model.Company.Address)
+        <div class="form-inline contact-div">
+            <text class="col-sm-3">@ResourceString.Instance.Contact</text>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.Name, new { size = "40" })
+                @Html.ValidationMessageFor(model => model.Name, string.Empty, new { @class = "text-danger row validation-error-message" })
+            </div>
+        </div>
+        <div class="form-inline email-div">
+            <text class="col-sm-3">E-mail</text>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.Email, new { size = "40" })
+                @Html.ValidationMessageFor(model => model.Email, string.Empty, new { @class = "text-danger row validation-error-message" })
+            </div>
+        </div>
+        <div id="bottom-text"><text>@ResourceString.Instance.ClaimedDetails_BottomCapture</text></div>
+        <button type="submit" class="btn btn-block btn-green" id="submit_info_btn">@ResourceString.Instance.ClaimedDetails_BottomBtnCapture</button>
+        <div>&nbsp;</div>
+    }
+</div>

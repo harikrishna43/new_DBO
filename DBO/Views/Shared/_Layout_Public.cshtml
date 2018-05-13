@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout_Master.cshtml";
+}
+
+<nav class="navbar navbar-dark navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="~/home/index">
+            <p id="company-logo-large">DBO</p>
+            <p id="company-logo-small">Discover Business Opportunities</p>
+        </a>
+        <div class="text-right order-lg-2 ml-auto">
+
+        </div>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarText">
+            &nbsp;
+        </div>
+    </div>
+</nav>
+
+@RenderBody()
+
+@RenderSection("scripts", required: false)
+

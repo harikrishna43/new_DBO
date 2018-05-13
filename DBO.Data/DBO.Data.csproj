@@ -1,0 +1,491 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DABC59BA-2EC1-41CD-9220-46DDA8427101}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DBO.Data</RootNamespace>
+    <AssemblyName>DBO.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.11.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.11\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.11.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.Entity.6.9.11\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="X.PagedList, Version=7.2.2.0, Culture=neutral, PublicKeyToken=00b6c4f97602e5e8, processorArchitecture=MSIL">
+      <HintPath>..\packages\X.PagedList.7.2.2\lib\net461\X.PagedList.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationDbContext.cs" />
+    <Compile Include="Filters\AdsFilter.cs" />
+    <Compile Include="Filters\ConnectionsFilter.cs" />
+    <Compile Include="Migrations\201712272051550_Companies.cs" />
+    <Compile Include="Migrations\201712272051550_Companies.Designer.cs">
+      <DependentUpon>201712272051550_Companies.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712272114201_Companies2.cs" />
+    <Compile Include="Migrations\201712272114201_Companies2.Designer.cs">
+      <DependentUpon>201712272114201_Companies2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801042324005_CompanyNewFields.cs" />
+    <Compile Include="Migrations\201801042324005_CompanyNewFields.Designer.cs">
+      <DependentUpon>201801042324005_CompanyNewFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801090301501_CompanySkills.cs" />
+    <Compile Include="Migrations\201801090301501_CompanySkills.Designer.cs">
+      <DependentUpon>201801090301501_CompanySkills.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801100241307_Employment.cs" />
+    <Compile Include="Migrations\201801100241307_Employment.Designer.cs">
+      <DependentUpon>201801100241307_Employment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801101656506_IndustryCodeNullable.cs" />
+    <Compile Include="Migrations\201801101656506_IndustryCodeNullable.Designer.cs">
+      <DependentUpon>201801101656506_IndustryCodeNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801101755262_Companies3.cs" />
+    <Compile Include="Migrations\201801101755262_Companies3.Designer.cs">
+      <DependentUpon>201801101755262_Companies3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801192042455_ClaimedField.cs" />
+    <Compile Include="Migrations\201801192042455_ClaimedField.Designer.cs">
+      <DependentUpon>201801192042455_ClaimedField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801230939341_Industries.cs" />
+    <Compile Include="Migrations\201801230939341_Industries.Designer.cs">
+      <DependentUpon>201801230939341_Industries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801231633026_Registrations.cs" />
+    <Compile Include="Migrations\201801231633026_Registrations.Designer.cs">
+      <DependentUpon>201801231633026_Registrations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801231736376_AddTitleToCompany.cs" />
+    <Compile Include="Migrations\201801231736376_AddTitleToCompany.Designer.cs">
+      <DependentUpon>201801231736376_AddTitleToCompany.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801281957040_CompanyConnectionsAndFollowers.cs" />
+    <Compile Include="Migrations\201801281957040_CompanyConnectionsAndFollowers.Designer.cs">
+      <DependentUpon>201801281957040_CompanyConnectionsAndFollowers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801291825212_RemoveClaimedFromCompany.cs" />
+    <Compile Include="Migrations\201801291825212_RemoveClaimedFromCompany.Designer.cs">
+      <DependentUpon>201801291825212_RemoveClaimedFromCompany.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802020832549_RegistrationCodes.cs" />
+    <Compile Include="Migrations\201802020832549_RegistrationCodes.Designer.cs">
+      <DependentUpon>201802020832549_RegistrationCodes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802031649049_renameToClaimRequest.cs" />
+    <Compile Include="Migrations\201802031649049_renameToClaimRequest.Designer.cs">
+      <DependentUpon>201802031649049_renameToClaimRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802031702129_FixClaimRequest.cs" />
+    <Compile Include="Migrations\201802031702129_FixClaimRequest.Designer.cs">
+      <DependentUpon>201802031702129_FixClaimRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802051216555_ScheduledEmails.cs" />
+    <Compile Include="Migrations\201802051216555_ScheduledEmails.Designer.cs">
+      <DependentUpon>201802051216555_ScheduledEmails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802052141030_UpdateRegistrationCodes.cs" />
+    <Compile Include="Migrations\201802052141030_UpdateRegistrationCodes.Designer.cs">
+      <DependentUpon>201802052141030_UpdateRegistrationCodes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802091351089_Logging.cs" />
+    <Compile Include="Migrations\201802091351089_Logging.Designer.cs">
+      <DependentUpon>201802091351089_Logging.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802130832303_IsCompanyProcessed.cs" />
+    <Compile Include="Migrations\201802130832303_IsCompanyProcessed.Designer.cs">
+      <DependentUpon>201802130832303_IsCompanyProcessed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802131606516_NewsAndComments.cs" />
+    <Compile Include="Migrations\201802131606516_NewsAndComments.Designer.cs">
+      <DependentUpon>201802131606516_NewsAndComments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802191058459_UpdateRegistrationCodes1.cs" />
+    <Compile Include="Migrations\201802191058459_UpdateRegistrationCodes1.Designer.cs">
+      <DependentUpon>201802191058459_UpdateRegistrationCodes1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802211140152_PhoneAndEmailIndexes.cs" />
+    <Compile Include="Migrations\201802211140152_PhoneAndEmailIndexes.Designer.cs">
+      <DependentUpon>201802211140152_PhoneAndEmailIndexes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803070932020_AddLanguagesResourcesAndDocuments.cs" />
+    <Compile Include="Migrations\201803070932020_AddLanguagesResourcesAndDocuments.Designer.cs">
+      <DependentUpon>201803070932020_AddLanguagesResourcesAndDocuments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803101624054_AddAdvertisements.cs" />
+    <Compile Include="Migrations\201803101624054_AddAdvertisements.Designer.cs">
+      <DependentUpon>201803101624054_AddAdvertisements.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803150059481_adsSkillsIndustriesMany2Many.cs" />
+    <Compile Include="Migrations\201803150059481_adsSkillsIndustriesMany2Many.Designer.cs">
+      <DependentUpon>201803150059481_adsSkillsIndustriesMany2Many.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803221148579_SkillsAndIndustryCodesForAds.cs" />
+    <Compile Include="Migrations\201803221148579_SkillsAndIndustryCodesForAds.Designer.cs">
+      <DependentUpon>201803221148579_SkillsAndIndustryCodesForAds.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803222152119_UpdateAds.cs" />
+    <Compile Include="Migrations\201803222152119_UpdateAds.Designer.cs">
+      <DependentUpon>201803222152119_UpdateAds.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803240939392_addingStatusToAd.cs" />
+    <Compile Include="Migrations\201803240939392_addingStatusToAd.Designer.cs">
+      <DependentUpon>201803240939392_addingStatusToAd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803251635412_CompanyAdsRelationship.cs" />
+    <Compile Include="Migrations\201803251635412_CompanyAdsRelationship.Designer.cs">
+      <DependentUpon>201803251635412_CompanyAdsRelationship.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803281241037_UpdateAdvertisementModel.cs" />
+    <Compile Include="Migrations\201803281241037_UpdateAdvertisementModel.Designer.cs">
+      <DependentUpon>201803281241037_UpdateAdvertisementModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804041058304_ColumnNameOfImagePathChangedToFilePath.cs" />
+    <Compile Include="Migrations\201804041058304_ColumnNameOfImagePathChangedToFilePath.Designer.cs">
+      <DependentUpon>201804041058304_ColumnNameOfImagePathChangedToFilePath.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804052151191_AddedCreatedByAdminColumnForAdvertisement.cs" />
+    <Compile Include="Migrations\201804052151191_AddedCreatedByAdminColumnForAdvertisement.Designer.cs">
+      <DependentUpon>201804052151191_AddedCreatedByAdminColumnForAdvertisement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804081728362_AdClicks.cs" />
+    <Compile Include="Migrations\201804081728362_AdClicks.Designer.cs">
+      <DependentUpon>201804081728362_AdClicks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804101736314_AddCountryToCompany.cs" />
+    <Compile Include="Migrations\201804101736314_AddCountryToCompany.Designer.cs">
+      <DependentUpon>201804101736314_AddCountryToCompany.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804121353142_ChangedNameOfColumnAndAddedNewColumnForAdvertisement.cs" />
+    <Compile Include="Migrations\201804121353142_ChangedNameOfColumnAndAddedNewColumnForAdvertisement.Designer.cs">
+      <DependentUpon>201804121353142_ChangedNameOfColumnAndAddedNewColumnForAdvertisement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804222207179_Notifications.cs" />
+    <Compile Include="Migrations\201804222207179_Notifications.Designer.cs">
+      <DependentUpon>201804222207179_Notifications.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804222212250_NotificationSettings.cs" />
+    <Compile Include="Migrations\201804222212250_NotificationSettings.Designer.cs">
+      <DependentUpon>201804222212250_NotificationSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804231521457_AddDateTimeToNotification.cs" />
+    <Compile Include="Migrations\201804231521457_AddDateTimeToNotification.Designer.cs">
+      <DependentUpon>201804231521457_AddDateTimeToNotification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804241131199_ProcessedNotifications.cs" />
+    <Compile Include="Migrations\201804241131199_ProcessedNotifications.Designer.cs">
+      <DependentUpon>201804241131199_ProcessedNotifications.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804281412411_UserFiles.cs" />
+    <Compile Include="Migrations\201804281412411_UserFiles.Designer.cs">
+      <DependentUpon>201804281412411_UserFiles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804291409289_AddTitleValueToUser.cs" />
+    <Compile Include="Migrations\201804291409289_AddTitleValueToUser.Designer.cs">
+      <DependentUpon>201804291409289_AddTitleValueToUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AdClick.cs" />
+    <Compile Include="Models\AdsIndustries.cs" />
+    <Compile Include="Models\AdsSkills.cs" />
+    <Compile Include="Models\Advertisement.cs" />
+    <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\CompanySkill.cs" />
+    <Compile Include="Models\Connection.cs" />
+    <Compile Include="Models\Follower.cs" />
+    <Compile Include="Models\Industry.cs" />
+    <Compile Include="Models\ClaimRequest.cs" />
+    <Compile Include="Models\Language.cs" />
+    <Compile Include="Models\LogItem.cs" />
+    <Compile Include="Models\NamedEntity.cs" />
+    <Compile Include="Models\News.cs" />
+    <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\NotificationSettings.cs" />
+    <Compile Include="Models\ProcessedNotifications.cs" />
+    <Compile Include="Models\RegistrationCode.cs" />
+    <Compile Include="Models\Resource.cs" />
+    <Compile Include="Models\ScheduledEmail.cs" />
+    <Compile Include="Models\Skill.cs" />
+    <Compile Include="Models\Document.cs" />
+    <Compile Include="Models\UserFile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\Contract\IRepository.cs" />
+    <Compile Include="Repositories\Implementation\AdsRepository.cs" />
+    <Compile Include="Repositories\CompanyRepository.cs" />
+    <Compile Include="Repositories\CompanySkillRepository.cs" />
+    <Compile Include="Repositories\ConnectionRepository.cs" />
+    <Compile Include="Repositories\DocumentRepository.cs" />
+    <Compile Include="Repositories\FollowerRepository.cs" />
+    <Compile Include="Repositories\DatabaseLogging.cs" />
+    <Compile Include="Repositories\Contract\IAdsRepository.cs" />
+    <Compile Include="Repositories\Implementation\Repository.cs" />
+    <Compile Include="Repositories\LanguageRepository.cs" />
+    <Compile Include="Repositories\NewsRepository.cs" />
+    <Compile Include="Repositories\NotificationSettingsRepository.cs" />
+    <Compile Include="Repositories\RegistrationRepository.cs" />
+    <Compile Include="Repositories\ScheduledEmailRepository.cs" />
+    <Compile Include="Repositories\SkillRepository.cs" />
+    <Compile Include="Repositories\TranslationRepository.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="UnitOfWork\IUnitOfWork.cs" />
+    <Compile Include="Utilities\FileUploader.cs" />
+    <Compile Include="Utilities\ResourceManager.cs" />
+    <Compile Include="ValidationAttributes\LocalizedDisplayName.cs" />
+    <Compile Include="ValidationAttributes\LocalizedRequiredAttribute.cs" />
+    <Compile Include="ViewModels\Admin\AdminCompanyViewModel.cs" />
+    <Compile Include="ViewModels\Admin\AdminSearchViewModel.cs" />
+    <Compile Include="ViewModels\AdvertisementViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ChangePasswordViewModel.cs" />
+    <Compile Include="ViewModels\ClaimingViewModel.cs" />
+    <Compile Include="ViewModels\CommentViewModel.cs" />
+    <Compile Include="ViewModels\CompanyNavigationViewModel.cs" />
+    <Compile Include="ViewModels\CompanyViewModel.cs" />
+    <Compile Include="ViewModels\ConnectViewModel.cs" />
+    <Compile Include="ViewModels\CreateCompanyViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ForgotPasswordViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ForgotViewModel.cs" />
+    <Compile Include="ViewModels\DisplayAdViewModel.cs" />
+    <Compile Include="ViewModels\EmployeeViewModel.cs" />
+    <Compile Include="ViewModels\IndexViewModel.cs" />
+    <Compile Include="ViewModels\Auth\LoginViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ManageLoginsViewModel.cs" />
+    <Compile Include="ViewModels\BaseCompanyInfoViewModel.cs" />
+    <Compile Include="ViewModels\LanguageViewModel.cs" />
+    <Compile Include="ViewModels\NewsViewModel.cs" />
+    <Compile Include="ViewModels\Auth\RegisterViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ResetPasswordViewModel.cs" />
+    <Compile Include="ViewModels\NotificationSettingsViewModel.cs" />
+    <Compile Include="ViewModels\NotificationViewModel.cs" />
+    <Compile Include="ViewModels\ResourceViewModel.cs" />
+    <Compile Include="ViewModels\Select2\Select2Model.cs" />
+    <Compile Include="ViewModels\Select2\Select2PagedModel.cs" />
+    <Compile Include="ViewModels\Auth\SetPasswordViewModel.cs" />
+    <Compile Include="ViewModels\TransferBudgetViewModel.cs" />
+    <Compile Include="ViewModels\TranslationViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201712272051550_Companies.resx">
+      <DependentUpon>201712272051550_Companies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712272114201_Companies2.resx">
+      <DependentUpon>201712272114201_Companies2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801042324005_CompanyNewFields.resx">
+      <DependentUpon>201801042324005_CompanyNewFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801090301501_CompanySkills.resx">
+      <DependentUpon>201801090301501_CompanySkills.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801100241307_Employment.resx">
+      <DependentUpon>201801100241307_Employment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801101656506_IndustryCodeNullable.resx">
+      <DependentUpon>201801101656506_IndustryCodeNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801101755262_Companies3.resx">
+      <DependentUpon>201801101755262_Companies3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801192042455_ClaimedField.resx">
+      <DependentUpon>201801192042455_ClaimedField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801230939341_Industries.resx">
+      <DependentUpon>201801230939341_Industries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801231633026_Registrations.resx">
+      <DependentUpon>201801231633026_Registrations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801231736376_AddTitleToCompany.resx">
+      <DependentUpon>201801231736376_AddTitleToCompany.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801281957040_CompanyConnectionsAndFollowers.resx">
+      <DependentUpon>201801281957040_CompanyConnectionsAndFollowers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801291825212_RemoveClaimedFromCompany.resx">
+      <DependentUpon>201801291825212_RemoveClaimedFromCompany.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802020832549_RegistrationCodes.resx">
+      <DependentUpon>201802020832549_RegistrationCodes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802031649049_renameToClaimRequest.resx">
+      <DependentUpon>201802031649049_renameToClaimRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802031702129_FixClaimRequest.resx">
+      <DependentUpon>201802031702129_FixClaimRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802051216555_ScheduledEmails.resx">
+      <DependentUpon>201802051216555_ScheduledEmails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802052141030_UpdateRegistrationCodes.resx">
+      <DependentUpon>201802052141030_UpdateRegistrationCodes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802091351089_Logging.resx">
+      <DependentUpon>201802091351089_Logging.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802130832303_IsCompanyProcessed.resx">
+      <DependentUpon>201802130832303_IsCompanyProcessed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802131606516_NewsAndComments.resx">
+      <DependentUpon>201802131606516_NewsAndComments.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802191058459_UpdateRegistrationCodes1.resx">
+      <DependentUpon>201802191058459_UpdateRegistrationCodes1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802211140152_PhoneAndEmailIndexes.resx">
+      <DependentUpon>201802211140152_PhoneAndEmailIndexes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803070932020_AddLanguagesResourcesAndDocuments.resx">
+      <DependentUpon>201803070932020_AddLanguagesResourcesAndDocuments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803101624054_AddAdvertisements.resx">
+      <DependentUpon>201803101624054_AddAdvertisements.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803150059481_adsSkillsIndustriesMany2Many.resx">
+      <DependentUpon>201803150059481_adsSkillsIndustriesMany2Many.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803221148579_SkillsAndIndustryCodesForAds.resx">
+      <DependentUpon>201803221148579_SkillsAndIndustryCodesForAds.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803222152119_UpdateAds.resx">
+      <DependentUpon>201803222152119_UpdateAds.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803240939392_addingStatusToAd.resx">
+      <DependentUpon>201803240939392_addingStatusToAd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803251635412_CompanyAdsRelationship.resx">
+      <DependentUpon>201803251635412_CompanyAdsRelationship.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803281241037_UpdateAdvertisementModel.resx">
+      <DependentUpon>201803281241037_UpdateAdvertisementModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804041058304_ColumnNameOfImagePathChangedToFilePath.resx">
+      <DependentUpon>201804041058304_ColumnNameOfImagePathChangedToFilePath.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804052151191_AddedCreatedByAdminColumnForAdvertisement.resx">
+      <DependentUpon>201804052151191_AddedCreatedByAdminColumnForAdvertisement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804081728362_AdClicks.resx">
+      <DependentUpon>201804081728362_AdClicks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804101736314_AddCountryToCompany.resx">
+      <DependentUpon>201804101736314_AddCountryToCompany.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804121353142_ChangedNameOfColumnAndAddedNewColumnForAdvertisement.resx">
+      <DependentUpon>201804121353142_ChangedNameOfColumnAndAddedNewColumnForAdvertisement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804222207179_Notifications.resx">
+      <DependentUpon>201804222207179_Notifications.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804222212250_NotificationSettings.resx">
+      <DependentUpon>201804222212250_NotificationSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804231521457_AddDateTimeToNotification.resx">
+      <DependentUpon>201804231521457_AddDateTimeToNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804241131199_ProcessedNotifications.resx">
+      <DependentUpon>201804241131199_ProcessedNotifications.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804281412411_UserFiles.resx">
+      <DependentUpon>201804281412411_UserFiles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804291409289_AddTitleValueToUser.resx">
+      <DependentUpon>201804291409289_AddTitleValueToUser.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DBO.Common\DBO.Common.csproj">
+      <Project>{0d464408-92ae-42c3-9f2f-696b92b5bf24}</Project>
+      <Name>DBO.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

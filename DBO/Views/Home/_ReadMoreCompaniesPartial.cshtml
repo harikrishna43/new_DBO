@@ -1,0 +1,28 @@
+﻿@model IEnumerable<DBO.Data.ViewModels.CompanyViewModel>
+
+@foreach (var company in Model)
+{
+    <div class="box box__cursor" onclick="window.location='/business/details/@company.Id';">
+        <div class="box__connections">
+            <span>@company.Connections</span>
+            @((string)ResourceString.Instance.Connections)
+        </div>
+        <p>
+            <span class="box__headline">@company.Name</span><br />
+            @company.Address1<br />
+            @company.Address2<br />
+            Tlf.: @company.Phone
+
+        </p>
+        <div class="box__logo">
+            @if (company.Image != null)
+            {
+                <img src="~/@company.Image">
+            }
+            else
+            {
+                <div class="gray light">@company.TextDescription</div>
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,71 @@
+﻿@using System.Linq
+@model IEnumerable<DBO.Data.Models.Document>
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+    var languages = ViewBag.Languages as List<DBO.Data.Models.Language>;
+    var name = Model.FirstOrDefault().Name;
+}
+
+<ul class="nav nav-tabs" role="tablist">
+    @foreach (var language in languages)
+    {
+        var document = Model.FirstOrDefault(x => x.LanguageId == language.Id);
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#@language.Id" role="tab">@language.Name</a>
+        </li>
+    }
+</ul>
+<div class="tab-content">
+    @foreach (var language in languages)
+    {
+        var document = Model.FirstOrDefault(x => x.LanguageId == language.Id);
+        var content = document != null ? document.Content : string.Empty;
+        var id = document != null ? document.Id : 0;
+
+
+        <div class="tab-pane" id="@language.Id" role="tabpanel">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("LanguageId", language.Id)
+                @Html.Hidden("Name", name)
+                <div class="form-horizontal">
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.Hidden("Id", id)
+
+                    <div class="form-group">
+                        <div class="col-md-10 content">
+                            <textarea id="content-@language.Id" name="Content">@content</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="@ResourceString.Instance.Save" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script>
+        $(function () {
+            $('.nav-item .nav-link').first().attr('class', 'nav-link active');
+            $('.tab-pane').first().attr('class', 'tab-pane active');
+            var ids = $('.content textarea');
+
+            for (let i = 0; i < ids.length; i++) {
+                CKEDITOR.replace($(ids[i]).attr('id'));
+            }
+        });
+    </script>
+}

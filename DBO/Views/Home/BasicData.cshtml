@@ -1,0 +1,261 @@
+﻿@model DBO.Data.ViewModels.CompanyViewModel
+@using DBO.Common
+@{
+    var logoPath = Constants.CompanyLogosPath.Trim('~');
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Func<string, string> showIfNotEmpty = x =>
+    {
+        return string.IsNullOrEmpty(x) ? "none" : "block";
+    };
+
+    Func<string, string> showIfEmpty = x =>
+    {
+        return string.IsNullOrEmpty(x) ? "block" : "none";
+    };
+}
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/company-details.css" rel="stylesheet" />
+
+<div class="container company-details">
+    <div class="row">
+        <div class="col-lg-3" style="padding:0; margin:0;">
+            @Html.Partial("_CompanyDetails", Model)
+        </div>
+
+        <div class="col-lg-8">
+            <div class="company-article">
+                <div class="card-header article-body">
+                    @ResourceString.Instance.BasicData
+                </div>
+                <div class="card company-article-data">
+
+                    <div class="card-block">
+                        <h4 class="card-title"></h4>
+                        <div class="card-text ">
+                            <div id="company-details">
+                                <span class="fa fa-edit pull-right"></span>
+                                @if (string.IsNullOrWhiteSpace(Model.Address1) && string.IsNullOrWhiteSpace(Model.Address2))
+                                {
+                                    <p>@ResourceString.Instance.AddressNotProvided</p>
+                                }
+                                else
+                                {
+
+                                    <p class="col-md-10">@Model.Address1</p>
+                                    <p class="col-md-10">@Model.Address2</p>
+                                }
+                            </div>
+                            <div id="company-details-edit" style="display:none">
+                                @using (Html.BeginForm("UpdateAddress", "Home", FormMethod.Post, new { id = "update-address-form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.HiddenFor(model => model.Id)
+                                    <span class="fa fa-close pull-right"></span>
+                                    <span class="fa fa-check pull-right"></span>
+                                    <div class="form-row">
+                                        <label for="Address" style="padding:10px">@ResourceString.Instance.Address</label>
+                                        @Html.TextBoxFor(model => model.Address, new { @class = "form-control col-md-8 mb-2" })
+                                    </div>
+                                    <div class="form-row">
+                                        <label for="Address" style="padding:10px">@ResourceString.Instance.PostCode</label>
+                                        @Html.TextBoxFor(model => model.PostCode, new { @class = "form-control col-md-2 mb-2" })
+                                    </div>
+                                    <div class="form-row">
+                                        <label for="Address" style="padding:10px">@ResourceString.Instance.City</label>
+                                        @Html.TextBoxFor(model => model.City, new { @class = "form-control col-md-8" })
+                                    </div>
+                                }
+                            </div>
+                            <hr />
+                            <div id="company-logo">
+                                <span class="fa fa-edit pull-right" style="display: @showIfNotEmpty(Model.Image);"></span>
+                                @if (!string.IsNullOrEmpty(Model.Image))
+                                {
+                                    <img class="mb-5" src="@logoPath@Model.Image" width="100" height="50" />
+                                }
+                            </div>
+                            <div id="company-logo-edit" style="display:@showIfEmpty(Model.Image)">
+                                @using (Html.BeginForm("UpdateImage", "Home", FormMethod.Post, new { id = "update-logo-form", enctype = "multipart/form-data" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.HiddenFor(model => model.Id)
+                                    <span class="fa fa-close pull-right"></span>
+                                    <span class="fa fa-check pull-right"></span>
+                                    <input type="file" name="file" onchange="document.getElementById('company-logo-preview').src = window.URL.createObjectURL(this.files[0])" name="file" accept="image/*" placeholder="Add image" style="font-size:11px;" />
+                                    <img class="mb-5" id="company-logo-preview" width="100" height="50" />
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="company-article">
+                <div class="card company-article-data">
+                    <div class="card-block">
+                        <span class="pull-right">@ResourceString.Instance.AvailableSkills: 3</span>
+                        <p class="card-title">@ResourceString.Instance.Skills</p>
+                        <div class="card-text ">
+                            <span class="text-danger skills-status-message"></span>
+                            <div class="form-row align-items-center mb-5" id="skills-container">
+                                @Html.Partial("~/Views/Companies/_CompanySkillsPartial.cshtml", Model.Skills)
+                            </div>
+                            @{
+                                var purchaseMoreSkillsLabel = ResourceString.Instance.PurchaseMoreSkills as string;
+                            }
+                            @Html.ActionLink(purchaseMoreSkillsLabel, "PurchaseSkills")
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="company-article">
+                <div class="card company-article-data">
+                    <div class="card-block">
+                        <p class="card-title">
+                            @ResourceString.Instance.Notifications
+                            <div class="card-text" id="notification-settings">
+                                @if (Model.NotificationSettings != null)
+                                {
+                                    Html.RenderPartial("_NotificationSettingsPartial", Model.NotificationSettings);
+                                }
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="company-article">
+                <div class="card company-article-data">
+                    <div class="card-block" id="employees-list">
+                        @Html.Action("List", "Employees", new { companyId = Model.CurrentCompany })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document" id="employeeModal_body">
+    </div>
+</div>
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script>
+        $(function () {
+            $('#company-details-edit .fa-check').click(function () {
+                $('#update-address-form').submit();
+            });
+            $('#company-logo-edit .fa-check').click(function () {
+                $('#update-logo-form').submit();
+            });
+
+
+            $('#company-details .fa-edit, #company-details-edit .fa-close').click(function () {
+                $('#company-details, #company-details-edit').toggle();
+            });
+
+            $('#company-logo .fa-edit, #company-logo-edit .fa-close').click(function () {
+                $('#company-logo, #company-logo-edit').toggle();
+            });
+            $('a.toggle-skills').click(function () {
+            var target = $(this).nextAll('div.textBox:first');
+            $(".textBox").not(target).hide();
+            target.toggle();
+            return false;
+        });
+
+                $('#skills-container').on('click', '.badge-close', function (event) {
+                    $('.skills-status-message').html('');
+                let sender = $(event.target);
+                let skillId = sender.data('skill-id');
+                let skillName = sender.data('skill-name');
+
+                $.post({
+                    url: '@Url.Action("RemoveCompanySkill", "Companies")',
+                    data: {skillId: skillId, companyId: @Model.Id},
+                    success: function () {
+                        $('#skills-container #' + skillId).remove();
+                        var newOption = new Option(skillName, skillId, true, true);
+                        $("#skills").append(newOption);
+
+                        $('#skills').val('').trigger('change');
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                })
+            });
+
+            $('#skills').on('select2:select', function () {
+        var skillId = $('.skill-name').val();
+        var skillName = $('.skill-name :selected').text();
+        addOrCreateSkill(skillName, skillId);
+    });
+
+            $('.create-skill').click(function () {
+        var skillName = $('#new-skill-name').val();
+        addOrCreateSkill(skillName);
+        $('#new-skill-name').val('')
+    });
+
+            $('#skills').select2({
+                width:'100%'
+            });
+            $('#skills').prepend($("<option></option>"));
+            $('#skills').val('').trigger('change');
+        });
+
+        function toggleAddSkills() {
+            var target = $('a.toggle-skills').nextAll('div.textBox:first');
+            $(".textBox").not(target).hide();
+            $('.textBox .skill-name').val('');
+            target.toggle();
+        }
+
+        function addOrCreateSkill(skillName, skillId) {
+            if (skillName) {
+                $.post({
+                    url: '@Url.Action("AddCompanySkill", "Companies")',
+                    data: { skillId: skillId, companyId: @Model.Id, skillName: skillName },
+                    success: function (response, text, xhr) {
+                            console.log(response);
+                            console.log(xhr.statusText);
+                            var template = " <div class='col-auto' id='" + response.skillId + "' style='float:left;'>" +
+                                "<div class='badge badge-primary'>" +
+                                "<div class='form-row flex-nowrap align-items-center'>" +
+                                "<div class='col'>" + skillName + "</div>" +
+                                "<div class='col-auto' > " +
+                                "<div class='badge-close' data-skill-id='" + response.skillId + "' data-skill-name='" + skillName + "'>X</div>" +
+                                "</div>" +
+                                "</div>" +
+                                "</div>" +
+                                "</div>";
+
+                            $('#skills-container').prepend(template);
+                            $("#skills option[value=" + response.skillId + "]").remove();
+                            $('#skills').val('').trigger('change');
+                    },
+                    error: function (response, text, message) {
+                        $('.skills-status-message').html(message);
+                    }
+                });
+            }
+        }
+
+        function createEmployee(companyId) {
+            if (companyId && companyId !== "-1") {
+                $.ajax({
+                    type: "GET",
+                    url: "/Employees/Create/",
+                    data: { companyId: companyId },
+                    success: function (data) {
+                        $("#employeeModal_body").html(data);
+                    }
+                })
+            }
+        }
+    </script>
+}

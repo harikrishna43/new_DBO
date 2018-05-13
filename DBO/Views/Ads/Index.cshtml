@@ -1,0 +1,105 @@
+﻿@using Microsoft.AspNet.Identity
+@model List<DBO.Data.ViewModels.AdvertisementViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var userId = User.Identity.GetUserId();
+}
+
+<div class="row">
+    <div class="col d-none d-lg-block">
+        <div class="card-white pad p-3 pl-4">
+            <div class="row">
+                <div class="offset-lg-10 col-lg-2 text-right">
+                    @Html.ActionLink((string)ResourceString.Instance.Create, "Create", null, new { @class = "btn btn-success" })
+                </div>
+            </div>
+
+            <table class="table">
+                <tr>
+                    <th>@ResourceString.Instance.Headline</th>
+                    <th>@ResourceString.Instance.Text</th>
+                    <th>@ResourceString.Instance.Link</th>
+                    <th>@ResourceString.Instance.Status</th>
+                    <th>@ResourceString.Instance.Company</th>
+                    <th></th>
+                </tr>
+                @foreach (var ad in Model)
+                {
+                    <tr>
+                        <td>@ad.Headline</td>
+                        <td>@ad.Text</td>
+                        <td>@ad.Link</td>
+                        <td>
+                            @if (ad.Status == DBO.Data.Models.AdvertisementStatus.Active)
+                            {
+                                <span class="label label-success">
+                                    @ResourceString.Instance.Active
+                                    <i class="fa fa-play-circle" style="margin-left:5px;color:green;"></i>
+                                </span>
+                            }
+                            else if (ad.Status == DBO.Data.Models.AdvertisementStatus.Paused)
+                            {
+                                <span class="label label-warning">
+                                    @ResourceString.Instance.OnAPause
+                                    <i class="fa fa-pause-circle" style="margin-left:5px;color:orange;"></i>
+                                </span>
+                            }
+                            else if (ad.Status == DBO.Data.Models.AdvertisementStatus.Stopped)
+                            {
+                                <span class="label label-danger">
+                                    @ResourceString.Instance.Stopped
+                                    <i class="fa fa-stop-circle" style="margin-left:5px;color:red"></i>
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            @ad.CompanyName
+                        </td>
+                        <td class="text-right">
+                            @if (ad.UserId == userId)
+                            {
+                                @Html.ActionLink((string)ResourceString.Instance.Remove, "Remove", new { ad.Id }, new { @class = "btn btn-danger" })
+                                <text>&nbsp;</text>
+                                @Html.ActionLink((string)ResourceString.Instance.Edit, "Edit", new { ad.Id }, new { @class = "btn btn-primary" })
+                                <text>&nbsp;</text>
+                            }
+                            @Html.ActionLink((string)ResourceString.Instance.Overview, "Overview", new { ad.Id }, new { @class = "btn btn-primary" })
+                            @if (ad.BudgetLeft != decimal.Zero && ad.BudgetLeft > decimal.Zero)
+                            {
+                                <a onclick="transferBudget('@ad.Id')" class="btn btn-primary">
+                                    <text style="color:white;">@ResourceString.Instance.TransferBudget</text>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="transferBudgetModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="transferBudgetModal_pl">
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        function transferBudget(id) {
+            $.ajax({
+                url: "/Ads/TransferBudget/",
+                type: "GET",
+                data: { id: id },
+                success: function (data) {
+                    $("#transferBudgetModal_pl").html(data);
+                    $("#transferBudgetModal").modal("show");
+                }
+            });
+        }
+    </script>
+}

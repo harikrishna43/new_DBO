@@ -1,0 +1,73 @@
+﻿@model DBO.Data.ViewModels.ClaimingViewModel
+
+<div class="card add-article" style="margin-top:13px;">
+    <div class="card-header header">
+        @String.Format(ResourceString.Instance.ClaimedDetails_TopHeader, Model.Company.Name)
+    </div>
+    <div class="card-block body">
+        <div class="register-top">
+            <text style="text-align:justify; color:#444444;">
+                @String.Format(ResourceString.Instance.RegisterClaimedCompany_MainTopText, Model.Company.Name)
+            </text>
+        </div>
+        <div class="register-company-info">
+            <h6>@Model.Name</h6>
+            @if (!string.IsNullOrEmpty(Model.Company.Address))
+            {
+                <text> @Model.Company.Address </text>
+            }
+            @if (!string.IsNullOrEmpty(Model.Company.PostCode) || !string.IsNullOrEmpty(Model.Company.City))
+            {
+                <br /><text>@Model.Company.PostCode&nbsp;@if (!string.IsNullOrEmpty(Model.Company.City))
+                {<text> @Model.Company.City </text>}</text>
+            }
+            @if (!string.IsNullOrEmpty(Model.Company.Phone))
+            {
+                <br /><text>Tlf.&nbsp;@Model.Company.Phone</text>
+            }
+        </div>
+        @using (Ajax.BeginForm("ClaimCompany", "Business", new AjaxOptions
+        {
+            UpdateTargetId = "main-claimed-info",
+            OnSuccess = "redirectToDetails",
+            HttpMethod = "POST"
+        }))
+        {
+
+            @Html.AntiForgeryToken();
+            @Html.HiddenFor(model => model.Company.Name)
+            @Html.HiddenFor(model => model.Company.PostCode)
+            @Html.HiddenFor(model => model.Company.Id)
+            @Html.HiddenFor(model => model.Company.Phone)
+            @Html.HiddenFor(model => model.Company.City)
+            @Html.HiddenFor(model => model.Company.Email)
+            @Html.HiddenFor(model => model.Company.Address)
+            <div class="share-mail">
+                <p><text style="color:#707070;margin-bottom:18px;">@ResourceString.Instance.EnterAdditionalEmail</text></p>
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control col-sm-9" })
+                @Html.ValidationMessageFor(model => model.Email, string.Empty, new { @class = "text-danger" })
+                <label style="color:#707070; font-size:12px;">@ResourceString.Instance.EmailReciveResponce</label>
+            </div>
+            <div class="confirm-information">
+                <div class="checkbox">
+                    <label>
+                        @Html.CheckBoxFor(model => model.IsAgreedWithTerms)
+                        <span style="color:black;">
+                            &nbsp;&nbsp;
+                            @ResourceString.Instance.ConfirmAgreement <a href="#" onclick="showOverlay(); return false;">@ResourceString.Instance.Agreement.ToLowerInvariant()</a>
+                        </span>
+                    </label>
+                    @Html.ValidationMessageFor(model => model.IsAgreedWithTerms, string.Empty, new { @class = "text-danger" })
+                </div>
+            </div>
+            <button data-companyId="@Model.Company.Id" id="revision-btn-confirm" class="btn btn-block btn-success col-sm-11">
+                @String.Format(ResourceString.Instance.ClaimedDetails_TopButtonCaption, Model.Name)
+            </button>
+        }
+
+    </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="hideOverlay()">
+    <div class="overlay-text">@ResourceString.Instance.LegalInformations</div>
+</div>

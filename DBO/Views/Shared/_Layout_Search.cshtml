@@ -1,0 +1,148 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout_Master.cshtml";
+    Func<string, string> getClassByAction = x =>
+    {
+        return (string)ViewContext.RouteData.Values["Action"].ToString().ToLower() == x ? "nav-item nav-link active uppercase" : "nav-item nav-link uppercase";
+    };
+}
+@*<link href="~/Content/font-awesome.css" rel="stylesheet" />*@
+<div class="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 header__logo">
+                <span>DBO</span><br />
+                Discover Business Opportunities
+            </div>
+            <div class="col-6">
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="banner__large container-fluid" style="background-image: url('/img/business-buildings-offices-night-windows-with-lights-city-trees_rbegayr4x_thumbnail-full12.jpg');">
+        <div class="row h-100">
+            <div class="col banner__inner mt-auto">
+                <div class="banner__inner__content col-lg-4 offset-lg-4 col-md-8 offset-md-2">
+                    <form action="/home/index/">
+                        <div class="form-row">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="form-group col-7">
+                                        <input type="text" class="form-control" placeholder="Søg i virksomheder..." />
+                                    </div>
+                                    <div class="form-group col">
+                                        <input type="text" class="form-control" placeholder="By..." />
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <button type="submit" class="form-control btn btn-header" id="search-buuton">Søg</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="xcontainer-fluid xnavigation">
+        @*<div class="row">
+                <div class="col selected">
+                    <a href="">Virksomheder</a>
+                </div>
+                <div class="col">
+                    <a href="">Nyheder</a>
+                </div>
+                <div class="col">
+                    <a href="">Opgavebørs</a>
+                </div>
+            </div>*@
+        <nav class="menu nav nav-pills nav-justified" id="navibar">
+            <a class="@getClassByAction("index")" active href="/home/index">@ResourceString.Instance.Companies</a>
+            <a class="@getClassByAction("newsfeed")" href="/home/newsfeed">@ResourceString.Instance.NewsFeeds</a>
+            <a class="@getClassByAction("jobexchange")" href="/home/jobexchange">@ResourceString.Instance.JobExchange</a>
+        </nav>
+
+    </div>
+
+    @*<div class="service-navigation">
+            <div class="container">
+                <div class="row">
+                    <div class="col pull-right">
+                        <span class="fa fa-globe"></span>
+                        <span class="fa fa-user-plus"></span>
+                        <span class="fa fa-sign-in"></span>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+</div>
+
+
+<div style="background-color: #fff;">
+    <div class="container" style="padding: 0px;">
+        <div class="text-right">
+            @Html.Partial("_MenuPartial")
+        </div>
+    </div>
+</div>
+
+@RenderBody()
+
+<section class="section-google shadow-effect">
+    <div class="row">
+        @Html.Action("DisplayAds", "Ads", new { viewName = "DisplayAds_Bottom" })
+    </div>
+</section>
+
+<section class="section-text footer">
+    <div class="footer__inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm first footer__logo">
+                    <span>DBO</span>
+                    Discover Business Opportunities
+                </div>
+                <div class="col-sm second footer__navigation">
+                    <span>@ResourceString.Instance.Information</span>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="">@ResourceString.Instance.About DBO</a>
+                        </li>
+                        <li>
+                            <a href="">@ResourceString.Instance.TermsOfUse</a>
+                        </li>
+                        <li>
+                            <a href="">Cookies & @ResourceString.Instance.PrivacyPolicy.ToLower()</a>
+                        </li>
+                        <li>
+                            <a href="">@ResourceString.Instance.Advertising</a>
+                        </li>
+                        <li>
+                            <a href="">@ResourceString.Instance.Press</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm third footer__navigation">
+                    <span>@ResourceString.Instance.Service</span>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="">@ResourceString.Instance.ContactInformation</a>
+                        </li>
+                        <li>
+                            <a href="">@ResourceString.Instance.ReportAbuse</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col footer__creditcards">
+                    <img src="/img/visa-curved-64px.png" />
+                    <img src="/img/mastercard-curved-64px.png" />
+                    <img src="/img/maestro-curved-64px.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@RenderSection("scripts", required: false)

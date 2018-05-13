@@ -1,0 +1,70 @@
+﻿@model IEnumerable<DBO.Data.ViewModels.LanguageViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<style>
+    .table.table-square thead tr th {
+        border: 1px solid gray;
+        color: gray;
+        font-weight: normal;
+    }
+
+    .linkButton {
+        background: none;
+        border: none;
+        color: #007bff;
+        cursor: pointer;
+        background-color: transparent;
+    }
+</style>
+
+<p style="padding:10px;">
+    @Html.ActionLink((string)ResourceString.Instance.Create, "Create")
+</p>
+<p class="text-success" id="successMessage"></p>
+<p class="text-danger" id="errorMessage"></p>
+<table class="table">
+    <tr>
+        <th>
+            @ResourceString.Instance.Name
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            @using (Ajax.BeginForm("Update", new AjaxOptions { HttpMethod = "POST", OnSuccess = "showSuccessMessage", OnFailure = "showErrorMessage" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("Id", item.Id)
+
+                <td>
+                    @Html.TextBox("Name", item.Name, new { @class = "form-control col-md-6" })
+                </td>
+                <td>
+
+                    <button type="submit" class="btn btn-success">@ResourceString.Instance.Save</button>
+                </td>
+            }
+        </tr>
+    }
+
+</table>
+@section scripts{
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.5/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ajax-unobtrusive@3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.5.5/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        function showSuccessMessage(data) {
+            $('#successMessage').show().html(data).delay(3000).fadeOut();
+        }
+        function showErrorMessage(data) {
+            $('#errorMessage').show().html(data.statusText).delay(3000).fadeOut('slow');
+        }
+    </script>
+}

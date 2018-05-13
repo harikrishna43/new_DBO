@@ -1,0 +1,27 @@
+﻿@using Microsoft.AspNet.Identity
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="header__buttons">
+            @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "btn-green btn-sm btn-no-radius" })
+            <a class="btn btn-dark btn-sm btn-no-radius btn-no-border" href="javascript:document.getElementById('logoutForm').submit()"> &nbsp;@ResourceString.Instance.LogOff</a>
+        </div>
+    }
+}
+else
+{
+    <div class="header__buttons">
+        <a class="btn btn-green btn-sm btn-no-radius" href="/account/register"><strong>@ResourceString.Instance.SignUp</strong></a>
+        <a class="btn btn-green btn-sm btn-no-radius" href="/account/login"><strong>@ResourceString.Instance.SignIn</strong></a>
+    </div>
+}
+
+@if (HttpContext.Current.IsDebuggingEnabled)
+{
+    @User.Identity.GetUserName()
+    <text>Company - </text>
+    @Html.Action("GetUserCompany", "Business")
+}

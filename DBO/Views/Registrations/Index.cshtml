@@ -1,0 +1,190 @@
+﻿@model DBO.Controllers.AdminRegistrationViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+<style>
+    strong nav {
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        /*background-color: lightblue;*/
+    }
+        strong nav div a {
+            margin-left: auto;
+            margin-right: auto;
+            /*border-style: solid;*/
+        }
+</style>
+
+<strong>
+<nav>
+    <div class="nav nav-pills" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">@ResourceString.Instance.InvitedNotRegistered</a>
+        <a class="nav-item nav-link" id="registered-tab" data-toggle="tab" href="#registered-pane" role="tab" aria-controls="registered-pane" aria-selected="true">@ResourceString.Instance.InvitedRegistered</a>
+        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">@ResourceString.Instance.SelfRegisteredCompanies</a>
+        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">@ResourceString.Instance.SelfRegisteredPersons</a>
+    </div>
+</nav>
+</strong>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <table class="table">
+            <tr>
+                <th>
+                    @ResourceString.Instance.Invited
+                </th>
+                
+                <th>
+                    @ResourceString.Instance.Name
+                </th>
+                
+                <th>
+                    Email
+                </th>
+            </tr>
+
+            @foreach (var item in Model.Invited)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Generated)
+                    </td>
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Company.Name)
+                    </td>
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Company.Email)
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+    <div class="tab-pane fade show" id="registered-pane" role="tabpanel" aria-labelledby="registered-pane">
+        <table class="table">
+            <tr>
+                <th>
+                    @ResourceString.Instance.Invited
+                </th>
+                <th>
+                    @ResourceString.Instance.Registered
+                </th>
+                <th>
+                    @ResourceString.Instance.NameInDatabase
+                </th>
+                <th>
+                    @ResourceString.Instance.NameInForm
+                </th>
+                <th>
+                    CVR
+                </th>
+                <th>
+                    Email
+                </th>
+            </tr>
+
+            @foreach (var item in Model.InvitedRegistered)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Generated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Registered)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Company.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cvr)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <table class="table">
+            <tr>
+                <th>
+                    @ResourceString.Instance.NameInDatabase
+                </th>
+                <th>
+                    @ResourceString.Instance.NameInForm
+                </th>
+                <th>
+                    @ResourceString.Instance.Registered
+                </th>
+                <th>
+                    CVR
+                </th>
+                <th>
+                    Email
+                </th>
+            </tr>
+
+            @foreach (var item in Model.Companies)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Company.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Registered)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cvr)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+            </tr>
+            }
+        </table>
+    </div>
+    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+        <table class="table">
+            <tr>
+                <th>
+                    @ResourceString.Instance.NameInForm
+                </th>
+                <th>
+                    @ResourceString.Instance.Registered
+                </th>
+                <th>
+                    Email
+                </th>
+            </tr>
+
+            @foreach (var item in Model.Employees)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Registered)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+

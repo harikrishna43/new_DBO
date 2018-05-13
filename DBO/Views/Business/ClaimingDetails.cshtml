@@ -1,0 +1,117 @@
+﻿@model DBO.Data.ViewModels.ClaimingViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/company-details.css" rel="stylesheet" />
+<link href="~/Content/registration.css" rel="stylesheet" />
+
+<div class="container " id="company-details">
+    <div class="row">
+        <div class="col-lg-3">
+
+            @Html.Partial("_CompanyDetails", Model.Company)
+        </div>
+        <div class="col-lg-6" id="main-claimed-info">
+            <div class="box box__no-padding add-article">
+                <div class="box__header box__headline__large">
+                    @String.Format(ResourceString.Instance.ClaimedDetails_TopHeader, Model.Company.Name)
+                </div>
+                <div class="box__innerbox">
+                    <p>
+                        @String.Format(ResourceString.Instance.ClaimedDetails_TopBody, Model.Company.Name)
+                    </p>
+                    @using (Ajax.BeginForm("ClaimCompany", "Business", new { id = Model.Company.Id }, new AjaxOptions
+                    {
+                        UpdateTargetId = "main-claimed-info",
+                        HttpMethod = "GET"
+                    }))
+                    {
+                        if (ViewBag.Success != null)
+                        {
+                            <p class="text-success success-message" style="font-size: 0.8em">@ViewBag.Success</p>
+                        }
+                        <button data-companyId="@Model.Company.Id" id="revision-btn" class="btn btn-block btn-green">@String.Format(ResourceString.Instance.ClaimedDetails_TopButtonCaption, Model.Company.Name)</button>
+                    }
+                </div>
+            </div>
+
+            <div class="box box__no-padding add-article">
+                <div class="box__header box__headline__large">
+                    @String.Format(ResourceString.Instance.ClaimedDetails_BottomHeader, Model.Company.Name)
+                </div>
+                @Html.Partial("_ClaimCompanyReferal", Model)
+            </div>
+        </div>
+        <div class="col-lg-3 " style="min-height: 710px;">
+            <div class="box">
+                <div class="add-connection">
+                    <div id="connection-button">
+                        @Html.Action("CheckForConnection", "Connections", new { companyId = Model.Company.Id })
+                    </div>
+                    <div id="follow-button">
+                        @Html.Action("CheckForFollower", "Connections", new { companyId = Model.Company.Id })
+                    </div>
+                </div>
+                <div>
+                    <text style="font-size: 14px; color: #313030;">@ResourceString.Instance.ClaimedDetails_RigthMenuMainText</text>
+                    <ul class="right-text-list">
+                        <li><small>@ResourceString.Instance.ClaimedDetails_FirstListItem</small></li>
+                        <li><small>@ResourceString.Instance.ClaimedDetails_SecondListItem</small></li>
+                        <li><small>@ResourceString.Instance.ClaimedDetails_ThirdListItem</small></li>
+                        <li><small>@ResourceString.Instance.ClaimedDetails_FourthListItem</small></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>@String.Format(ResourceString.Instance.ConnectWith, Model.Company.Name)</h5>
+                    <text style="font-size: 14px; color: #313030; text-align: left">@String.Format(ResourceString.Instance.ConnectMainInfo, Model.Company.Name)</text>
+                </div>
+                @Html.Partial("_ClaimCompanyReferalRightPanel", Model)
+                <div class="add-connection ">
+                    @*@Html.Action(AddConnection)*@
+                    <a href="#">+ @ResourceString.Instance.Connections</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="success-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title text-success">Claimed successfully!</h4>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+@section scripts{
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.5/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ajax-unobtrusive@3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.5.5/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        function showOverlay() {
+            $("#overlay").css('display', 'block');
+        }
+
+        function hideOverlay() {
+            $("#overlay").css('display', 'none');
+        }
+
+        function redirectToDetails(data) {
+            if (data.RedirectUrl)
+                window.location.href = data.RedirectUrl;
+        }
+
+    </script>
+}

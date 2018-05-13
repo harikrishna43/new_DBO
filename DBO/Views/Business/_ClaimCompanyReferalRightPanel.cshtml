@@ -1,0 +1,30 @@
+﻿@model DBO.Data.ViewModels.ClaimingViewModel
+
+<div id="registration-form-rhs">
+    @using (Ajax.BeginForm("ClaimCompanyReferal", "Business", new { partialName = "_ClaimCompanyReferalRightPanel" }, new AjaxOptions
+    {
+        UpdateTargetId = "registration-form-rhs",
+        HttpMethod = "POST"
+    }, new { @class = "form-horizontal" }))
+    {
+        if (ViewBag.SuccessMessage != null)
+        {
+            <p class="text-success success-message" style="font-size:0.8em">@ViewBag.SuccessMessage</p>
+        }
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Company.Name)
+        @Html.HiddenFor(model => model.Company.PostCode)
+        @Html.HiddenFor(model => model.Company.Id)
+        @Html.HiddenFor(model => model.Company.Phone)
+        @Html.HiddenFor(model => model.Company.City)
+        @Html.HiddenFor(model => model.Company.Email)
+        @Html.HiddenFor(model => model.Company.Address)
+
+        @Html.TextBoxFor(model => model.Name, new { size = "25", placeholder = @ResourceString.Instance.Name, style = "margin-top:10px;" })
+        @Html.ValidationMessageFor(model => model.Name, string.Empty, new { @class = "text-danger row validation-error-message" })
+
+        @Html.TextBoxFor(model => model.Email, new { size = "25", placeholder = @ResourceString.Instance.Email, style = "margin-top:10px;" })
+        @Html.ValidationMessageFor(model => model.Email, string.Empty, new { @class = "text-danger row validation-error-message" })
+        <button class="btn btn-block btn-success col-sm-2" id="right-sub-btn">Submit</button>
+    }
+</div>

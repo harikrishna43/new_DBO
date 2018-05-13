@@ -1,0 +1,147 @@
+﻿@using DBO.Data.ViewModels
+@model IEnumerable<CompanyViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout_Search.cshtml";
+}
+<section class="section-cards">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 d-none d-lg-block">
+
+                <div class="box box__small d-lg-flex align-items-lg-center h100">
+                    <div class="box__connections box__connections__small">
+                        <span>23</span>
+                        connections
+                    </div>
+
+                    <img src="/img/logo.jpeg" class="img-fluid" />
+                </div>
+
+                <div class="box box__small d-lg-flex align-items-lg-center h100">
+                    <div class="box__connections box__connections__small">
+                        <span>20</span>
+                        connections
+                    </div>
+
+                    <img src="/img/logo.jpeg" class="img-fluid" />
+                </div>
+
+                <div class="box box__small d-lg-flex align-items-lg-center h100">
+                    <div class="box__connections box__connections__small">
+                        <span>23</span>
+                        connections
+                    </div>
+
+                    <img src="/img/logo.jpeg" class="img-fluid" />
+                </div>
+
+                <div class="box box__small d-lg-flex align-items-lg-center h100">
+                    <div class="box__connections box__connections__small">
+                        <span>20</span>
+                        connections
+                    </div>
+
+                    <img src="/img/logo.jpeg" class="img-fluid" />
+                </div>
+
+
+            </div>
+            <div class="col-lg-6">
+                <div id="companies-section">
+                    @foreach (CompanyViewModel company in Model)
+                    {
+                        <div class="box box__cursor" onclick="window.location='/business/details/@company.Id';">
+                            <div class="box__connections">
+                                <span>@company.Connections</span>
+                                @((string)ResourceString.Instance.Connections)
+                            </div>
+                            <p>
+                                <span class="box__headline">@company.Name</span><br />
+                                @company.Address1<br />
+                                @company.Address2<br />
+                                Tlf.: @company.Phone
+
+                            </p>
+                            <div class="box__logo">
+                                @if (company.Image != null)
+                                {
+                                    <img src="~/@company.Image">
+                                }
+                                else
+                                {
+                                    <div class="gray light">@company.TextDescription</div>
+                                }
+                            </div>
+                        </div>
+
+
+                        @*<div class="card-white pad" style="cursor: pointer;" onclick="window.location='/business/details/@company.Id';">
+                                <div class="float-right text-center light">
+                                    <div class="h4 mb-0 green light">@company.Connections</div>
+                                    <small class="gray">@((string)ResourceString.Instance.Connections.ToUpper())</small>
+                                </div>
+                                <h5 class="mb-0">@company.Name</h5>
+                                <div>@company.Address1</div>
+                                <div>@company.Address2</div>
+                                <div>Tif.: @company.Phone</div>
+                                <div class="text-right">
+                                    @{
+                                        if (company.Image != null)
+                                        {
+                                            <img src="~/@company.Image">
+                                        }
+                                        else
+                                        {
+                                            <div class="gray light">@company.TextDescription</div>
+                                        }
+                                    }
+                                </div>
+                            </div>*@
+                    }
+                </div>
+                @if (ViewBag.HasMoreResults)
+                {
+                    <div class="col-xs-12">
+                        <button class="btn btn-default" id="load-more" style="margin-left:43%;">Load more</button>
+                    </div>
+                }
+            </div>
+            <div class="col-lg-3 d-none d-lg-block">
+
+                <div class="row">
+                    @Html.Action("DisplayAds", "Ads", new { viewName = "DisplayAds_Left" })
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    <script>
+        $(function () {
+            let pageNumber = 1;
+            $('#load-more').click(function () {
+                loadMore(pageNumber++);
+            });
+        });
+
+        function loadMore(pageNumber) {
+            let baseUrl = '/Home/ReadMore';
+            //let search = $('#search').val();
+            //let searchCity = $('#searchCity').val();
+            $.ajax({
+                //url: baseUrl.concat('?pageNumber=', pageNumber, '&search=', search, '&searchCity=', searchCity),
+                url: baseUrl.concat('?pageNumber=', pageNumber),
+                success: function (response, status, xhr) {
+                    $('#companies-section').append(response);
+                    let hasMoreResults = xhr.getResponseHeader('X-HasMoreResults');
+
+                    if (hasMoreResults === 'false') {
+                        $('#load-more').parent().hide();
+                    }
+                }
+            })
+        }
+    </script>
+}

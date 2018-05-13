@@ -1,0 +1,403 @@
+﻿@model DBO.Data.Models.Company
+@{
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+<section class="section-cards pt-3">
+    <div class="container-fluid">
+
+        <div class="row pb-2 pb-xl-0">
+            <div class="col-12 col-xl-7">
+
+                <form action="#">
+                    <div class="form-row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Company name">
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Zip from">
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Zip to">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="industry">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-2x fa-angle-down"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-auto">
+                            <div class="form-group">
+                                <button class="btn btn-success btn-block">SEARCH</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="col">
+
+                <div class="form-row">
+                    <div class="col-sm-6 col-md-4 col-xl-6">
+                        <div class="form-row justify-content-between align-items-center pb-1">
+                            <div class="col">Only not active members:</div>
+                            <div class="col-auto">
+                                <label class="checkbox-group">
+                                    <input type="checkbox" name="" value="">
+                                    <span class="switch"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-xl-6">
+                        <div class="form-row justify-content-between align-items-center pb-1">
+                            <div class="col-auto">Country:</div>
+                            <div class="col">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control " placeholder="Denmark">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-xl-6">
+                        <div class="form-row justify-content-between align-items-center pb-1">
+                            <div class="col">Only active members:</div>
+                            <div class="col-auto">
+                                <label class="checkbox-group">
+                                    <input type="checkbox" name="" value="">
+                                    <span class="switch"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="card-white px-4 pt-4 w-100">
+                <div class="row justify-content-between">
+
+                    <div class="col-md-6 col-lg-4 pb-3">
+                        <div class="row mb-5">
+                            <div class="col">
+                                <div class="h5"><strong>COMPANY</strong></div>
+                            </div>
+                        </div>
+                        <div class="form-row form-group align-items-center">
+                            <div class="col-5 col-sm-3 gray mb-lg-2">Name</div>
+                            <div class="col col-sm-9">
+                                <div class="mb-lg-2">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row form-group align-items-center">
+                            <div class="col-5 col-sm-3 gray mb-lg-2">Address</div>
+                            <div class="col col-sm-9">
+                                <div class="mb-lg-2">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row form-group align-items-center">
+                            <div class="col-5 col-sm-3 gray mb-lg-2">Zip code</div>
+                            <div class="col col-sm-9">
+                                <div class="mb-lg-2">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row form-group align-items-center">
+                            <div class="col-5 col-sm-3 gray mb-lg-2">City</div>
+                            <div class="col col-sm-9">
+                                <div class="mb-lg-2">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row form-group align-items-center">
+                            <div class="col-5 col-sm-3 gray mb-lg-2">Phone</div>
+                            <div class="col col-sm-9">
+                                <div class="mb-lg-2">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row form-group align-items-center">
+                            <div class="col-5 col-sm-3 gray mb-lg-2">Vat number</div>
+                            <div class="col col-sm-9">
+                                <div class="mb-lg-2">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 pb-3">
+                        <div class="row mb-5">
+                            <div class="col">
+                                <div class="h5"><strong>CONTACT INFO</strong></div>
+                            </div>
+                        </div>
+                        <div class="form-row form-group align-items-center">
+                            <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">Name</div>
+                            <div class="col col-sm-9 col-xl-8">
+                                <div class="mb-lg-2">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row form-group align-items-center">
+                            <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">Title</div>
+                            <div class="col col-sm-9 col-xl-8">
+                                <div class="mb-lg-2">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row form-group align-items-center">
+                            <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">E-mail</div>
+                            <div class="col col-sm-9 col-xl-8">
+                                <div class="mb-lg-2">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row form-group align-items-center">
+                            <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">Chairman</div>
+                            <div class="col col-sm-9 col-xl-8">
+                                <div class="mb-lg-2">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row form-group align-items-center">
+                            <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">Owner</div>
+                            <div class="col col-sm-9 col-xl-8">
+                                <div class="mb-lg-2">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row form-group align-items-center">
+                            <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">Web</div>
+                            <div class="col col-sm-9 col-xl-8">
+                                <div class="mb-lg-2">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-xl-3 pb-3">
+                        <div class="row mb-5 justify-content-between">
+                            <div class="col-auto">
+                                <div class="h5"><strong>SKILLS</strong></div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="h5"><a href="#" class="link-blue dec">0 Connections</a></div>
+                            </div>
+                        </div>
+                        <div class="form-row justify-content-between align-items-center mb-5">
+                            <div class="col-6 col-sm-4 col-lg-6 col-xl-4">
+                                <div class="badge badge-primary">
+                                    <div class="form-row justify-content-end align-items-center">
+                                        <div class="col">regnskab</div>
+                                        <div class="col-auto">
+                                            <div class="badge-close">X</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-lg-6 col-xl-4">
+                                <div class="badge badge-primary">
+                                    <div class="form-row justify-content-end align-items-center">
+                                        <div class="col">regnskab</div>
+                                        <div class="col-auto">
+                                            <div class="badge-close">X</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-lg-6 col-xl-4">
+                                <div class="badge badge-primary">
+                                    <div class="form-row justify-content-end align-items-center">
+                                        <div class="col">regnskab</div>
+                                        <div class="col-auto">
+                                            <div class="badge-close">X</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-lg-6 col-xl-4">
+                                <div class="badge badge-primary">
+                                    <div class="form-row justify-content-end align-items-center">
+                                        <div class="col">regnskab</div>
+                                        <div class="col-auto">
+                                            <div class="badge-close">X</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <a href="#" class="link-blue">Add more</a>
+                            </div>
+                        </div>
+                        <div class="h5 mb-3"><strong>INDUSTRY CODE</strong></div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-2x fa-angle-down"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row mb-5">
+                            <div class="col-auto gray">Ad protection</div>
+                            <div class="col-auto">
+                                <label class="checkbox-group">
+                                    <input type="checkbox" name="" value="">
+                                    <span class="switch"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-row justify-content-between align-items-end">
+                            <div class="col-auto"><a href="#" class="link-blue">Send into mail</a></div>
+                            <div class="col-auto col-xl-4">
+                                <button class="btn btn-success btn-block">SAVE</button>
+                            </div>
+                        </div>
+                    </div>
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script>
+        $(function () {
+
+            $(".textBox").hide();
+            $('a.toggle-skills').click(function () {
+                var target = $(this).nextAll('div.textBox:first');
+                $(".textBox").not(target).hide();
+                target.toggle();
+                return false;
+            });
+
+            $('.skills').on('click', '.badge-close', function (event) {
+                let sender = $(event.target);
+                let skillId = sender.data('skill-id');
+                let skillName = sender.data('skill-name');
+
+                $.post({
+                    url: '@Url.Action("RemoveCompanySkill", "Companies")',
+                    data: {skillId: skillId, companyId: @Model.Id},
+                    success: function () {
+                        $('.skills #' + skillId).remove();
+                        var newOption = new Option(skillName, skillId, true, true);
+                        $("#skills").append(newOption);
+
+                        $('#skills').val('').trigger('change');
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                })
+            });
+
+            $('#skills').on('select2:select', function () {
+                var skillId = $('.skill-name').val();
+                var skillName = $('.skill-name :selected').text();
+                addOrCreateSkill(skillName, skillId);
+            });
+
+            $('.create-skill').click(function () {
+                var skillName = $('#new-skill-name').val();
+                addOrCreateSkill(skillName);
+                ('#new-skill-name').val('')
+            });
+
+            $('#skills').select2({
+                width:'100%'
+            });
+            $('#skills').append($("<option></option>"));
+            $('#skills').val('').trigger('change');
+
+
+            $('#industry-code-dropdown').select2({
+                minimumInputLength: 0,
+                allowClear: true,
+                placeholder: 'Industry code',
+                ajax: {
+                    url: '@Url.Action("IndustryCodeSelectTwo", "Companies")',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        var req = {
+                            pageSize: 20,
+                            page: params.page ? params.page : 1,
+                            term: params.term ? params.term : '',
+                        };
+
+                        return req;
+                    },
+                    processResults: function (data, params) {
+                        var page = params.page ? params.page : 1;
+                        var more = (page * 20) < data.TotalCount;
+                        return {
+                            results: data.Items,
+                            pagination: {
+                                more: more
+                            }
+                        };
+                    },
+                    cache: true,
+                }
+            });
+            $('#industry-code-dropdown').append($("<option></option>").attr("value", @Model.IndustryCode).text(@Model.IndustryCode));
+        });
+
+        function toggleAddSkills() {
+            var target = $('a.toggle-skills').nextAll('div.textBox:first');
+            $(".textBox").not(target).hide();
+            $('.textBox .skill-name').val('');
+            target.toggle();
+        }
+
+        function addOrCreateSkill(skillName, skillId) {
+            $.post({
+                url: '@Url.Action("AddCompanySkill", "Companies")',
+                data: { skillId: skillId, companyId: @Model.Id, skillName: skillName },
+                success: function (response) {
+                    console.log(response);
+                    var template = " <div class='col-6 col-sm-4 col-lg-6 col-xl-4' id='" + response.skillId + "' style='float:left;'>" +
+                        "<div class='badge badge-primary'>" +
+                        "<div class='form-row justify-content-end align-items-center'>" +
+                        "<div class='col'>" + skillName + "</div>" +
+                        "<div class='col-auto' > " +
+                        "<div class='badge-close' data-skill-id='" + response.skillId + "' data-skill-name='" + skillName + "'>X</div>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>";
+
+                    $('.skills').append(template);
+                    $("#skills option[value=" + response.skillId + "]").remove();
+                    $('#skills').val('').trigger('change');
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+    </script>
+}

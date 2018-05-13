@@ -1,0 +1,197 @@
+﻿@using DBO.Common
+@model DBO.Data.ViewModels.AdminSearchViewModel
+@{
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+<style>
+    .table.table-square thead tr th {
+        border: 1px solid gray;
+        color: gray;
+        font-weight: normal;
+    }
+</style>
+<section class="section-cards pt-3">
+    <div class="container-fluid" style="margin:0;padding:0;">
+        @Html.Partial("_SearchPartial", Model.SearchParams)
+        <table class="table table-square companies-table">
+            <thead>
+                <tr>
+                    <th>
+                        @ResourceString.Instance.Name
+                    </th>
+                    <th>
+                        @ResourceString.Instance.PostCode
+                    </th>
+                    <th>
+                        @ResourceString.Instance.City
+                    </th>
+                    <th>
+                        @ResourceString.Instance.Skills
+                    </th>
+                    <th>
+                        @ResourceString.Instance.PersonName
+                    </th>
+                    <th>
+                        @ResourceString.Instance.Title
+                    </th>
+                    <th>
+                        @ResourceString.Instance.Email
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="card-white px-4 pt-4 w-100">
+                @{
+                    int number = 0;
+                    var s = Model.SearchParams;
+                }
+                @foreach (var item in Model.Companies)
+                {
+                    number++;
+                    <tr id="tr_@item.Id">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PostCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompanySkills.Count)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PersonName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.ActionLink((string)ResourceString.Instance.Edit, "Edit", "Companies",
+                                                                        new
+                                                                        {
+                                                                            id = item.Id,
+                                                                            searchName = s.SearchName,
+                                                                            searchIndustryCode = s.SearchIndustryCode,
+                                                                            searchZipFrom = s.SearchZipFrom,
+                                                                            searchZipTo = s.SearchZipTo,
+                                                                                   //cvrNumber = s.CvrNumber,
+                                                                                   //email = s.Email,
+                                                                                   //phone = s.Phone,
+                                                                                   //skill = s.Skill,
+                                                                                   onlyUnprocessed = s.OnlyUnprocessed,
+                                                                            n = number
+                                                                        }, new { id = item.Id })
+                            <a href="#" onclick="openModal(@item.Id)">@ResourceString.Instance.Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (ViewBag.HasMoreResults)
+        {
+            <div class="col-xs-10">
+                <button class="btn btn-default" id="load-more" style="margin-left:43%;">Load more</button>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Modal -->
+<div id="deleteCompanyModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="text-align:center">
+                <h4 class="modal-title" style="width:100%;">@ResourceString.Instance.Delete @ResourceString.Instance.Company.ToLower()</h4>
+            </div>
+            <div class="modal-body" style="text-align:center">
+                @ResourceString.Instance.AreYouSure
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="delete-company btn btn-success" style="text-decoration: none; color: white">
+                    @ResourceString.Instance.Delete
+                </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    @ResourceString.Instance.Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script type="text/javascript">
+        $(function () {
+            let pageNumber = 1;
+            $('#load-more').click(function () {
+                loadMore(pageNumber++);
+            });
+        });
+
+        function openModal(id) {
+            $('#deleteCompanyModal').modal('show');
+            $(".delete-company").click(function () {
+                var deleteButton = $(this);
+                $.ajax({
+                    url: "/Companies/Delete",
+                    type: "GET",
+                    data: {
+                        id: id,
+                        searchName: $('#SearchName').val(),
+                        searchIndustryCode: $('#SearchIndustryCode').val(),
+                        searchZipFrom: $('#SearchZipFrom').val(),
+                        searchZipTo: $('#SearchZipTo').val(),
+                        onlyUnprocessed: $('#OnlyUnprocessed').is(":checked"),
+                        fromIndex: true
+                    },
+                    success: function (data) {
+                        if (data.Success == true) {
+                            $("#tr_" + id).remove();
+                            $('#deleteCompanyModal').modal('hide');
+                        }
+                        else {
+                            $('body').html(data);
+                            $('#deleteCompanyModal').modal('hide');
+                        }
+
+                    }
+                });
+            });
+            return false;
+        };
+
+        function loadMore(pageNumber) {
+            let baseUrl = '/Companies/ReadMore';
+            let searchName = $('#SearchName').val();
+            let searchZipFrom = $('#SearchZipFrom').val();
+            let searchZipTo = $('#SearchZipTo').val();
+            let searchIndustryCode = $('#SearchIndustryCode').val();
+            let onlyUnprocessed = $('#OnlyUnprocessed')[0].checked;
+            $.ajax({
+                url: baseUrl.concat('?page=', pageNumber,
+                    '&searchName=', searchName,
+                    '&searchIndustryCode=', searchIndustryCode,
+                    '&searchZipFrom=', searchZipFrom,
+                    '&searchZipTo=', searchZipTo,
+                    '&onlyUnprocessed=', onlyUnprocessed),
+                success: function (response, status, xhr) {
+                    $('.companies-table tbody').append(response);
+                    let hasMoreResults = xhr.getResponseHeader('X-HasMoreResults');
+
+                    if (hasMoreResults === 'false') {
+                        $('#load-more').parent().hide();
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            })
+        }
+</script>
+}

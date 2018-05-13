@@ -1,0 +1,126 @@
+﻿@model DBO.Common.SearchParams
+@using (Html.BeginForm("Index", "Companies"))
+{
+    <div class="row pb-2 pb-xl-0" style="margin: 0 10px 0 10px;">
+        <div class="col-12 col-xl-7">
+
+            @*@if (Model.SelectedSkills != null)
+            {
+                var selectedSkills = (List<int>)ViewBag.SelectedSkills;
+                for (int i = 0; i < selectedSkills.Count; i++)
+                {
+                    <input type="hidden" name="SelectedSkillsValue" value="@(selectedSkills[i])" />
+                }
+            }*@
+
+            <div class="form-row">
+                <div class="col">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.EditorFor(m => m.SearchName, new { htmlAttributes = new { @class = "form-control", placeholder = ResourceString.Instance.CompanyName } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-2">
+                    <div class="form-group">
+                        @Html.EditorFor(m => m.SearchZipFrom, new { htmlAttributes = new { @class = "form-control", placeholder = ResourceString.Instance.ZipFrom } })
+                    </div>
+                </div>
+                <div class="col-6 col-md-2">
+                    <div class="form-group">
+                        @Html.EditorFor(m => m.SearchZipTo, new { htmlAttributes = new { @class = "form-control", placeholder = ResourceString.Instance.ZipTo } })
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <div class="input-group">
+                            @Html.DropDownList("searchIndustryCode", (List<SelectListItem>)ViewBag.IndustryList, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-auto">
+                    <div class="form-group">
+                        <button class="btn btn-success btn-block">@ResourceString.Instance.Search.ToUpperInvariant()</button>
+                    </div>
+                </div>
+            </div>
+            @*<div class="form-row" style="margin-top:5px;margin-bottom:10px;">
+                    <div class="col">
+                        <div class="col-md-12">
+                            <input type="number" class="form-control" placeholder="CVR @Resources.Number.ToLower()" name="CvrNumber" id="CvrNumber" value="@ViewBag.CVRNumber">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="col-md-12">
+                            <input type="email" class="form-control" placeholder="@Resources.Email @Resources.Address.ToLower()" name="Email" id="Email" value="@ViewBag.Email">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" placeholder="@Resources.Phone @Resources.Number.ToLower()" name="Phone" id="Phone" value="@ViewBag.Phone">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        @Html.DropDownList("Skill", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>*@
+            <div>
+                @if (ViewBag.Count != null && (int)ViewBag.Count > 0)
+                {
+                    <span>@ResourceString.Instance.Found @ViewBag.Count @ResourceString.Instance.Companies.ToLower()</span>
+                }
+            </div>
+
+        </div>
+        <div class="col">
+            <div class="form-row">
+                <div class="col-sm-6 col-md-4 col-xl-6">
+                    <div class="form-row justify-content-between align-items-center pb-1">
+                        <div class="col">@ResourceString.Instance.OnlyNotActiveMembers:</div>
+                        <div class="col-auto">
+                            @Html.CheckBoxFor(m => m.UnactiveMembers, new { @class = "form-control", style = "width:27px; height:27px;" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-xl-6">
+                    <div class="form-row justify-content-between align-items-center pb-1">
+                        <div class="col-auto">@ResourceString.Instance.Country:</div>
+                        <div class="col">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control " placeholder="Denmark">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-xl-6">
+                    <div class="form-row justify-content-between align-items-center pb-1">
+                        <div class="col">@ResourceString.Instance.OnlyActiveMembers:</div>
+                        <div class="col-auto">
+                            @Html.CheckBoxFor(m => m.ActiveMembers, new { @class = "form-control", style = "width:27px; height:27px;" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-xl-6">
+                    <div class="form-row justify-content-between align-items-center pb-1">
+                        <div class="col">@ResourceString.Instance.OnlyUnprocessed:</div>
+                        <div class="col-auto">
+                            @Html.CheckBoxFor(m => m.OnlyUnprocessed, new { @class = "form-control", style= "width:27px; height:27px;" })
+                        </div>
+                    </div>
+                </div>
+                @if (ViewBag.Count != null && (int)ViewBag.Count > 0)
+                {
+                    <div class="col-sm-6 col-md-4 col-xl-6">
+                        <div class="form-row justify-content-between align-items-center pb-1">
+                            <div class="col-md-2"></div>
+                            <div class="col-auto">
+                                @Html.ActionLink((string)ResourceString.Instance.CreateNew, "Create")
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+}

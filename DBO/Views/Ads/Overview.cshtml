@@ -1,0 +1,224 @@
+﻿@model DBO.Data.ViewModels.AdvertisementViewModel
+@using DBO.Data.Models
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var skills = ViewBag.Skills as List<SelectListItem>;
+    var industries = ViewBag.Industries as List<SelectListItem>;
+    Func<AdvertisementStatus, string> disable = (x) =>
+    {
+        if (Model.Status == x)
+        {
+            return "disabled";
+        }
+
+        return string.Empty;
+    };
+}
+<link rel="stylesheet" href="~/Content/bootstrap-multiselect.css" />
+<link rel="stylesheet" href="~/Content/ads.css" />
+
+<section class="section-cards">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 d-none d-lg-block">
+
+                <div class="card-white pad p-3 pl-4" style="min-height: 541px">
+                    <p>@*Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem sed maiores, dicta nostrum. Fugiat aliquam, impedit facilis, libero fugit repellat, aut earum fuga neque dolorem est aperiam laborum dolorum numquam.*@</p>
+                </div>
+
+                <div class="card-white pad p-3 pl-4" style="min-height: 541px">
+                </div>
+
+            </div>
+            <div class="col-lg-6">
+                <div id="companies-section">
+
+                    <div class="row justify-content-lg-center">
+                        <div class="col-lg-12 d-none d-lg-block">
+                            <div class="card-header pad p-3 pl-4 mb-2">
+                                <strong>@ResourceString.Instance.Overview</strong>
+                            </div>
+
+                            <div class="card-white pad p-3">
+                                <p class="card-title pl-2">@ResourceString.Instance.Layout:</p>
+                                <div class="pad pt-2 pl-4 pr-4 col-sm-5" style="display:inline-block">
+                                    <div class="col-sm-10" style="display:inline-block">
+                                        <p>@ResourceString.Instance.ActiveFrom: @Model.StartDate.Value.ToShortDateString()</p>
+                                        @if (Model.EndDateBudgetDefined && Model.EndDate.HasValue)
+                                        {
+                                            <p>@ResourceString.Instance.ActiveUntill: @Model.EndDate.Value.ToShortDateString()</p>
+                                        }
+                                    </div>
+                                    @if (Model.Type == AdvertisementType.Image)
+                                    {
+                                        <div class="card-white" style="padding:15px;">
+                                            <a href="/ads/open/@Model.Id">
+                                                <img src="@Model.FilePath" alt="" width="300">
+                                            </a>
+                                            <p class="ml-2" style="padding:0;margin:0; overflow:hidden"><strong>@Model.Headline</strong></p>
+                                            <p class="ml-2" style="font-size:12px;padding:0;margin:0;overflow:hidden">@Model.Text</p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="card-white" style="padding:15px;width:320px;">
+                                            <a href="/ads/open/@Model.Id">
+                                                <video muted loop autoplay src="@Model.FilePath" class="video-js rounded"></video>
+                                            </a>
+                                            <p class="ml-2" style="padding:0;margin:0; overflow:hidden"><strong>@Model.Headline</strong></p>
+                                            <p class="ml-2" style="font-size:12px;padding:0;margin:0;overflow:hidden">@Model.Text</p>
+                                        </div>
+                                    }
+
+                                </div>
+
+                            </div>
+
+                            <div class="card-white pad p-3">
+                                <p class="card-title pl-2">@ResourceString.Instance.Statistics</p>
+                                <div class="pad pt-2 pl-4 pr-4">
+                                    <div class="row col-sm-12 mb-4">
+                                        @ResourceString.Instance.Status: @Model.Status.ToString()
+                                    </div>
+                                    <div class="row  col-sm-12 mb-4">
+                                        @ResourceString.Instance.Visibility: @ViewBag.Reason
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label class="col-xs-12">  @ResourceString.Instance.AdOpened: <span>@Model.ClicksCount</span></label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label class="col-xs-12">  @ResourceString.Instance.BudgetSpent: <span>@Model.BudgetSpent </span></label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label class="col-xs-12">  @ResourceString.Instance.RemainingBudget: <span>@Model.Budget </span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-white pad p-3">
+                                <p class="card-title">  @ResourceString.Instance.Payment</p>
+                                <div class="pt-2 pl-4 pr-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">  @ResourceString.Instance.TotalBudget</label>
+                                        <div class="col-sm-3 mt-2">
+                                            <span>@Model.Budget</span>
+                                        </div>
+                                        <label class="col-sm-3 col-form-label">  @ResourceString.Instance.PricePerClick</label>
+                                        <div class="col-sm-3 mt-2">
+                                            <span>@Model.ClickPrice</span>
+                                        </div>
+                                    </div>
+                                    <p style="font-size:12px;">
+                                        Lorem ipsum dolor sit amet, nobis singulis eam et, ea cum tota brute appellantur. Audire invenire eloquentiam ius te, eu simul argumentum has, quem volutpat mea at. Vix ne sint tation, ad eos facer propriae. Ad eam tritani voluptaria disputationi, id sea laudem graece probatus, id dico vide eos. Vim at mucius luptatum euripidis, mea te velit eirmod gloriatur.
+                                    </p>
+                                </div>
+                            </div>
+
+                            @*<div class="row">
+                                <div class="col text-right">
+                                    <button type="submit" class="btn btn-default">  @ResourceString.Instance.ContinueToPayment</button>
+                                </div>
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 d-none d-lg-block">
+
+                <div class="card-white pad p-3 pl-4" style="min-height: 541px">
+                    <p>@*Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem sed maiores, dicta nostrum. Fugiat aliquam, impedit facilis, libero fugit repellat, aut earum fuga neque dolorem est aperiam laborum dolorum numquam.*@</p>
+                </div>
+
+                <div class="card-white pad p-3 pl-4" style="min-height: 541px">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-google">
+    <div class="container">
+
+    </div>
+</section>
+
+<script src="~/Scripts/bootstrap-multiselect.js"></script>
+
+@section scripts {
+    <script>
+
+
+        var input = document.getElementById('image-input');
+        var image = document.getElementById('image');
+        var selectCrop = document.getElementById('select-crop');
+        var imageField = document.getElementById('image-field');
+        var form = document.getElementById('ads-form');
+        var newBlob;
+
+        function changeStatus(status) {
+            document.getElementById('ad-status').value = status;
+        }
+
+        window.onload = function () {
+            image.src = '@Model.FilePath';
+            imageField.value = '@Model.FilePath';
+        }
+
+        input.onchange = function (ev) {
+            selectCrop.hidden = false;
+            console.log(ev.target.files);
+            var file = ev.target.files[0];
+            var blobUrl = URL.createObjectURL(file);
+            image.src = blobUrl;
+            var cropper = new Cropper(image, {
+                modal: true,
+                aspectRatio: 250 / 150
+            });
+            selectCrop.onclick = function () {
+                var canvas = cropper.getCroppedCanvas();
+                var reader = new FileReader();
+                if (canvas.msToBlob) {
+                    newBlob = canvas.msToBlob();
+                    selectCrop.hidden = true;
+                    reader.readAsDataURL(newBlob)
+                    reader.onloadend = function () {
+                        imageField.value = reader.result;
+                    }
+                    imageField.value = reader.result;
+                    cropper.destroy();
+                } else {
+                    newBlob = canvas.toBlob(function (ev) {
+                        newBlob = ev;
+                        reader.readAsDataURL(ev)
+
+                        reader.onloadend = function () {
+                            imageField.value = reader.result;
+                        }
+                        cropper.destroy();
+                        selectCrop.hidden = true;
+                    });
+                }
+
+            };
+        };
+
+        //form.onsubmit = function (ev) {
+        //    ev.preventDefault();
+        //    var newForm = new FormData(form);
+        //    newForm.append('Image', newBlob);
+        //    var xhr = new XMLHttpRequest()
+        //    xhr.open('POST', '/ads/Create');
+        //    xhr.send(newForm);
+        //};
+
+        $('.multi-select').multiselect({
+            buttonContainer: '<div id="dropdown-butt" class="form-control form-control-lg" />',
+            buttonClass: 'btn dropdown-button'
+        });
+
+    </script>
+}

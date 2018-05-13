@@ -1,0 +1,66 @@
+﻿#ads-form {
+    color: #818080;
+    font-size: 16px;
+}
+
+    #ads-form input[type="text"] {
+        border-radius: 0;
+    }
+
+    #ads-form .card-title {
+        text-transform: uppercase;
+        font-size: 14px;
+    }
+
+.dropdown-button {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+    border: none;
+}
+
+/* Hide the browser's default radio button */
+/*.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}*/
+
+/* Create a custom radio button */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container input:checked ~ .checkmark {
+    background-color: gray;
+}
+
+
+    /* Show the indicator (dot/circle) when checked */
+    .container input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+    top: 9px;
+    left: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 5%;
+    background: white;
+}
+

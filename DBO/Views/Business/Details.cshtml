@@ -1,0 +1,141 @@
+﻿@model DBO.Data.ViewModels.CompanyViewModel
+@using DBO.Common
+@{
+    var newsImagesPath = Constants.NewsImagesPath.Trim('~');
+    var companyLogos = Constants.CompanyLogosPath.Trim('~');
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/company-details.css" rel="stylesheet" />
+
+<div class="container company-details">
+    <div class="row">
+        <div class="col-lg-3">
+            @Html.Partial("_CompanyDetails", Model)
+        </div>
+
+        <div class="col-lg-6">
+            @if (Model.Id == Model.CurrentCompany)
+            {
+                using (Html.BeginForm("CreateNews", "News", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="CompanyId" value="@Model.Id" />
+                    <div class="card add-article" style="margin-bottom:20px;">
+                        <div class="card-header headexr">
+                            @ResourceString.Instance.WriteTo @Model.Name
+                        </div>
+                        <div class="card-block body">
+                            <input required type="text" placeholder="@ResourceString.Instance.Title" name="Title" style="width: 100%;
+                                                                                        border: none;
+                                                                                        padding-top: 10px;
+                                                                                        padding-left: 30px;
+                                                                                        width:90%;
+                                                                                        display:none" />
+                            <hr style="margin:10px 0px 10px 20px; width:90%; display:none" />
+                            <textarea required placeholder="@ResourceString.Instance.WriteVisit" rows="2" name="Content" id="Content"></textarea>
+                            <div class="col-md-12">
+                                <button type="button" onclick="$('#file').click()" class="btn btn-default" style="display:none">@ResourceString.Instance.SelectImage</button>
+                                <label id="imageName"></label>
+                                <input type="file" name="file" id="file" accept="image/*" placeholder="Add image" style="font-size:11px;display:none;" />
+                                <button class="btn btn-success pull-right" style="margin-bottom:10px;">@ResourceString.Instance.Send</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+            @Html.Action("GetNewsForCompany", "News", new { companyId = Model.Id })
+            @if (bool.Parse(Response.Headers["X-HasMoreResults"]))
+            {
+                <div class="col-xs-12">
+                    <button class="btn btn-default" id="load-more" style="margin-left:43%;">@ResourceString.Instance.LoadMore</button>
+                </div>
+            }
+        </div>
+
+        <div class="col-lg-3 card-white">
+            <div class="add-connection">
+                <div id="connection-button">
+                    @Html.Action("CheckForConnection", "Connections", new { companyId = Model.Id })
+                </div>
+                <div id="follow-button">
+                    @Html.Action("CheckForFollower", "Connections", new { companyId = Model.Id })
+                </div>
+            </div>
+
+            <div class="title-strikethrough col-md-12">@ResourceString.Instance.Connections</div>
+            @foreach (var connectedCompany in Model.ApprovedConnections)
+            {
+                <div class="connection-logo">
+                    @if (!string.IsNullOrEmpty(connectedCompany.Image))
+                    {
+                        <img src="@companyLogos@connectedCompany.Image" alt="@connectedCompany.Name" />
+                    }
+                    else
+                    {
+                        @connectedCompany.Name
+                    }
+
+                </div>
+            }
+            @if (Model.Id == Model.CurrentCompany && Model.PendingConnections.Count > 0)
+            {
+                <p style="font-size:10px">@ResourceString.Instance.FollowingCompaniesWantsToConnect</p>
+                foreach (var connectedCompany in Model.PendingConnections)
+                {
+                    <div class="connected-company col-md-12" style="font-size:10px;padding:10px 0 10px 0;">
+                        @connectedCompany.Name
+                        @{
+                            string declineLabel = ResourceString.Instance.Decline;
+                            string acceptLabel = ResourceString.Instance.Accept;
+                        }
+                        @Html.ActionLink(declineLabel, "DeclineConnection", "Connections", new { companyId = connectedCompany.Id }, new { @class = "pull-right" })
+                        @Html.ActionLink(acceptLabel, "AcceptConnection", "Connections", new { companyId = connectedCompany.Id }, new { @class = "pull-right", style = "margin-right:10px" })
+                    </div>
+                }
+            }
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.5/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ajax-unobtrusive@3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.5.5/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/Companies/news.js"></script>
+    <script>
+        $(function () {
+            let button = $('#connection-button');
+            let pageNumber = 1;
+            if (button.text() !== "CONNECTED") {
+                button.parent().attr('disabled', 'disabled');
+            }
+
+            $('#load-more').click(function (event) {
+                loadMore(pageNumber++);
+            });
+        });
+
+        function loadMore(pageNumber) {
+            let baseUrl = '/News/GetNewsForCompany';
+            let companyId = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
+            $.ajax({
+                url: baseUrl.concat('?pageNumber=', pageNumber, '&companyId=', companyId),
+                success: function (response, status, xhr) {
+                    $('#company-news').append(response);
+                    let hasMoreResults = xhr.getResponseHeader('X-HasMoreResults');
+
+                    if (hasMoreResults === 'False') {
+                        $('#load-more').hide();
+                    }
+                }
+            })
+        }
+    </script>
+}

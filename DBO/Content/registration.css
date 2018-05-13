@@ -1,0 +1,308 @@
+﻿body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #F3F3F3;
+}
+
+
+/* Default to hide the video on all devices */
+#video {
+    display: none
+}
+
+/* Default to display the image on all devices */
+#videosubstitute {
+    display: block;
+    width: auto;
+    height: 100%;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+#fullScreenDiv {
+    width: 100%;
+    min-height: 100%;
+    /* Set the height to match that of the viewport. */
+    height: 100vh;
+    width: auto;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: relative;
+    background-image: url('../img/bg.jpg');
+    background-size: cover;
+    background-position: left top;
+}
+
+
+
+@media (min-aspect-ratio: 16/9) {
+    #video {
+        height: 150%;
+        top: -100%;
+        margin-top: -120px;
+    }
+
+    #videosubstitute {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-aspect-ratio: 16/9) {
+    #video {
+        width: 150%;
+        left: -100%;
+    }
+
+    #videosubstitute {
+        display: block;
+        width: auto;
+        height: 100%;
+    }
+}
+/*if there is 992  pixels or more, then display the video but hide the image*/
+@media only screen and (min-width : 991px) {
+    #video {
+        display: block;
+    }
+
+    #videosubstitute {
+        display: none
+    }
+}
+
+/* The container for our text and stuff */
+#overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+}
+
+    #overlay .top-banner {
+        background-color: #000;
+        height: 100px;
+    }
+
+    #overlay .login-container {
+        text-align: right;
+        margin-top: 20px;
+    }
+
+        #overlay .login-container input[type=button] {
+            color: #fff;
+            background-color: #8DC63F;
+            text-transform: uppercase;
+            border: 0px;
+            font-size: 14px;
+            font-weight: 600;
+            height: 25px;
+        }
+
+        #overlay .login-container input[type=text] {
+            height: 25px;
+        }
+
+    #overlay .forgot-password {
+        display: block;
+        text-align: right;
+        margin-right: 60px;
+        margin-top: 7px;
+        color: #818080;
+        font-size: 15px;
+    }
+
+    #overlay .submit {
+        margin-top: 80px;
+        background: rgba(0, 0, 0, .95);
+    }
+
+        #overlay .submit .form-container {
+            color: #fff;
+            margin-top: 80px;
+            margin-left: 60px;
+        }
+
+            #overlay .submit .form-container .headline {
+                font-size: 28px;
+                text-transform: uppercase;
+            }
+
+            #overlay .submit .form-container .sub-headline {
+                font-size: 16px;
+                margin-bottom: 25px;
+                text-transform: uppercase;
+            }
+
+            #overlay .submit .form-container input[type=text] {
+                color: #444;
+                height: 40px;
+                margin-bottom: 34px;
+            }
+
+            #overlay .submit .form-container input[type=submit] {
+                background-color: #8DC63F;
+                color: #fff;
+                height: 40px;
+                border: 0px;
+                border-radius: 5px;
+            }
+
+
+        #overlay .submit .statements-container .statements {
+            margin-top: 100px;
+            margin-left: 70px;
+            border-right: 1px solid #fff;
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            padding-right: 30px;
+            line-height: 50px;
+        }
+
+
+            #overlay .submit .statements-container .statements span {
+                text-decoration: underline;
+            }
+
+            #overlay .submit .statements-container .statements ul li {
+                font-size: 16px;
+            }
+
+@media only screen and (max-width:1024px) {
+    #overlay .submit .statements-container .statements {
+        line-height: 42px;
+    }
+}
+
+@media only screen and (max-width:768px) {
+    #overlay .submit .statements-container .statements {
+        margin-top: 50px;
+        margin-left: 30px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #fff;
+        line-height: 40px;
+    }
+
+    #overlay .submit .form-container {
+        margin-top: 30px;
+        margin-left: 0px;
+    }
+}
+
+#overlay .arrow {
+    text-align: center;
+    margin-top: 95px;
+}
+
+#overlay .link-container {
+    background: rgba(0, 0, 0, .95);
+    margin-top: 158px;
+}
+
+    #overlay .link-container .link {
+        color: #fff;
+        font-size: 26px;
+        text-transform: uppercase;
+        text-align: center;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        border: 1px solid #333434;
+        height: 65px;
+    }
+
+    .content .feed {
+        background-color: #fff;
+        border: 1px solid #DDDFE2;
+        margin-top: 20px;
+        padding: 10px 5px 5px 10px;
+    }
+
+        .content .feed .stats {
+            text-align: right;
+            font-size: 12px;
+            color: #818080;
+        }
+
+            .content .feed .stats span {
+                display: block;
+            }
+
+        .content .feed .company {
+            color: #818080;
+            font-size: 16px;
+        }
+
+        .content .feed .timestamp {
+            color: #818080;
+            font-size: 12px;
+        }
+
+        .content .feed .heading {
+            color: #070707;
+            font-size: 16px;
+            padding-left: 70px;
+        }
+
+        .content .feed .text {
+            color: #484343;
+            font-size: 14px;
+            padding-left: 70px;
+            margin-bottom: 15px;
+        }
+
+        .content .feed .share {
+            text-align: right;
+        }
+
+    .content .side-feed {
+        background-color: #fff;
+        border: 1px solid #DDDFE2;
+        margin-top: 20px;
+        padding: 10px 5px 5px 10px;
+        height: 438px;
+    }
+
+.side-container {
+    position: relative;
+}
+
+    .side-container .side-add-right {
+        position: absolute;
+        top: 20px;
+        right: -162px;
+    }
+
+    .side-container .side-add-left {
+        position: absolute;
+        top: 20px;
+        left: -162px;
+    }
+
+
+.add-banner {
+    background-color: #fff;
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 1px solid #95989A;
+}
+
+.storytelling {
+    background-color: #484343;
+    color: #fff;
+    font-size: 32px;
+    font-style: italic;
+    padding-top: 140px;
+    padding-bottom: 140px;
+}
+
+.footer {
+    background-color: #000;
+    height: 150px;
+}

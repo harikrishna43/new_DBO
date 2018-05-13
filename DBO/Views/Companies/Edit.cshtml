@@ -1,0 +1,611 @@
+﻿@using DBO.Common
+@using System.Linq
+@using DBO.Data.Utilities
+@model DBO.Data.ViewModels.AdminCompanyViewModel
+@{
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+
+    Func<int, string, string> getPlural = (x, y) =>
+    {
+        return x == 1 ? y : string.Format("{0}s", y);
+    };
+
+    var s = Model.SearchParams ?? new SearchParams();
+
+    var registrations = Model.Company.RegistrationCodes;
+    var scheduledEmails = Model.Company.ScheduledEmails;
+}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<style>
+    #navigation-edit-menu a {
+        color: gray;
+        text-decoration: none;
+    }
+</style>
+<section class="section-cards pt-3">
+    <div class="container-fluid">
+        @Html.Partial("_SearchPartial", Model.SearchParams)
+        <div class="row pb-2 pb-xl-0" style="margin:0 10px 15px 10px;">
+            <div class="col-sm-6">
+                @*@Html.ActionLink((string)ResourceString.Instance.Save, "Create")*@
+            </div>
+            <div class="col-sm-6">
+                <div class="pull-right" id="navigation-edit-menu">
+                    <a style="margin-right:30px;" href="javascript:history.back()"><span class="fa fa-backward"></span>&nbsp;&nbsp;&nbsp;@ResourceString.Instance.Back.ToUpperInvariant()</a>
+                    @if (ViewBag.N != null)
+                    {
+                        if (Model.CompanyNavigation.Previous != null)
+                        {
+                            <a href="@Url.Action("Edit",new
+                             {
+                                 Id = Model.CompanyNavigation.Previous,
+                                 searchName = s.SearchName,
+                                 searchIndustryCode = s.SearchIndustryCode,
+                                 searchZipFrom = s.SearchZipFrom,
+                                 searchZipTo = s.SearchZipTo,
+                                 onlyUnprocessed = s.OnlyUnprocessed,
+                                 n = (ViewBag.N != null) ? ((int?)ViewBag.N) - 1 : null
+                             })"><span class="fa fa-chevron-left"></span>&nbsp;&nbsp;&nbsp;</a>
+                        }
+                        @Html.DisplayFor(model => model.Company.Name)
+                        if (Model.CompanyNavigation.Next != null)
+                        {
+                            <a href="@Url.Action("Edit", new
+                             {
+                                 Id = Model.CompanyNavigation.Next,
+                                 searchName = s.SearchName,
+                                 searchIndustryCode = s.SearchIndustryCode,
+                                 searchZipFrom = s.SearchZipFrom,
+                                 searchZipTo = s.SearchZipTo,
+                                 onlyUnprocessed = s.OnlyUnprocessed,
+                                 n = (ViewBag.N != null) ? ((int?)ViewBag.N) + 1 : null
+                             })">&nbsp;&nbsp;&nbsp;<span class="fa fa-chevron-right"></span></a>
+                        }
+                    }
+                </div>
+            </div>
+
+
+        </div>
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="row">
+                <div class="card-white px-4 pt-4 w-100">
+                    <div class="row justify-content-between">
+                        <h4 style="text-align: center; width: 100%">@ViewBag.Message</h4>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="row">
+            @using (Html.BeginForm("Edit", "Companies", new
+            {
+                id = Model.Company.Id,
+                searchName = s.SearchName,
+                searchIndustryCode = s.SearchIndustryCode,
+                searchZipFrom = s.SearchZipFrom,
+                searchZipTo = s.SearchZipTo,
+                onlyUnprocessed = s.OnlyUnprocessed,
+                n = ViewBag.N
+            }, FormMethod.Post, new { style = "padding:0; margin:0;width:100%;" }))
+            {
+                <div class="card-white px-4 pt-4 w-100">
+                    <div class="row justify-content-between">
+                        @*@Html.AntiForgeryToken()*@
+                        <div class="col-md-6 col-lg-4 pb-3">
+                            <div class="row mb-5">
+                                <div class="col">
+                                    <div class="h5">
+                                        <strong>@ResourceString.Instance.Company.ToUpper()</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Company.Name)
+                                </div>
+                                <div class="col col-sm-9">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Company.Name, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Company.Name)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Company.Address)
+                                </div>
+                                <div class="col col-sm-9">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Company.Address, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Company.Address)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row form-group align-items-center">
+
+                                <div class="col-3 col-xs-3 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Company.PostCode)
+                                </div>
+                                <div class="col-3 col-xs-3">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Company.PostCode, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Company.PostCode)
+                                    </div>
+                                </div>
+                                <div class="col-1 col-xs-2 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Company.City)
+                                </div>
+                                <div class="col-5 col-xs-4">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Company.City, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Company.City)
+                                    </div>
+                                 </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Company.Country)
+                                </div>
+                                <div class="col col-sm-9">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Company.Country, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Company.Country)
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Company.Phone)
+                                </div>
+                                <div class="col col-sm-9">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Company.Phone, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Company.Phone)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Company.CVR)
+                                </div>
+                                <div class="col col-sm-9">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Company.CVR, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Company.CVR)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4 pb-3">
+                            <div class="row mb-5">
+                                <div class="col">
+                                    <div class="h5">
+                                        <strong>@ResourceString.Instance.ContactInfo.ToUpper()</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Company.PersonName)
+                                </div>
+                                <div class="col col-sm-9 col-xl-8">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Company.PersonName, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Company.PersonName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Company.Title)
+                                </div>
+                                <div class="col col-sm-9 col-xl-8">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Company.Title, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Company.Title)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Company.Email)
+                                </div>
+                                <div class="col col-sm-9 col-xl-8">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Company.Email, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Company.Email)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Company.Chairman)
+                                </div>
+                                <div class="col col-sm-9 col-xl-8">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Company.Chairman, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Company.Chairman)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Company.Owner)
+                                </div>
+                                <div class="col col-sm-9 col-xl-8">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Company.Owner, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Company.Owner)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Company.Web)
+                                </div>
+                                <div class="col col-sm-9 col-xl-8">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Company.Web, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Company.Web)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-xl-3 pb-3">
+                            <div class="row mb-5 justify-content-between">
+                                <div class="col-auto">
+                                    <div class="h5">
+                                        <strong>@ResourceString.Instance.Skills.ToUpper()</strong>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="h5">
+                                        <a href="#" class="link-blue dec">@Model.Company.Connections @getPlural(Model.Company.Connections, ResourceString.Instance.Connections)</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row justify-content-between align-items-center mb-5" id="skills-container">
+                                @Html.Partial("_CompanySkillsPartial", Model.Company.CompanySkills)
+                            </div>
+                            <div class="h5 mb-3">
+                                <strong style="text-transform: uppercase;">
+                                    @Html.LabelFor(model => model.Company.IndustryCode)
+                                </strong>
+                            </div>
+                            <div class="form-group">
+                                @Html.DropDownList("Company.IndustryId", (List<SelectListItem>)ViewBag.IndustryIdList, new { @class = "form-control" })
+                            </div>
+                            <div class="form-row">
+                                <div class="col-auto gray">
+                                    @Html.LabelFor(model => model.Company.AdvertisingProtection)
+                                </div>
+                                <div class="col-auto">
+                                    <label class="form-group">
+                                        @Html.CheckBoxFor(model => model.Company.AdvertisingProtection, new { @class = "form-control", style = "width:28px; height:28px" })
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-auto gray">
+                                    @Html.LabelFor(model => model.Company.IsProcessed, (string)ResourceString.Instance.IsProcessed)
+                                </div>
+                                <div class="col-auto">
+                                    <label class="form-group">
+                                        @Html.CheckBoxFor(model => model.Company.IsProcessed, new { @class = "form-control", style = "width:28px; height:28px" })
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-row mb-5">
+                                <div class="col-auto">
+                                    @if (Model.IsClaimed)
+                                    {
+                                        @Html.ActionLink((string)ResourceString.Instance.SignInAsThisCompany, "SignInAs", new { id = Model.Company.Id })
+                                    }
+                                    else
+                                    {
+                                        <h5>@ResourceString.Instance.NotClaimed</h5>
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-row justify-content-between align-items-end">
+                                @if (registrations.Count == 0 && scheduledEmails.Count == 0)
+                                {
+                                    <div class="col-md-3">
+                                        <a href="#introMailModal" data-toggle="modal" data-target="#introMailModal" class="link-blue">@ResourceString.Instance.SendIntroMail</a>
+                                    </div>
+                                }
+                                <div class="col-md-1">
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-success btn-block">@ResourceString.Instance.Save</button>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#" style="color:#bf0000" onclick="openModal()">@ResourceString.Instance.Delete @ResourceString.Instance.Company.ToLower()</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @Html.HiddenFor(model => model.CompanyNavigation.Current)
+                @Html.HiddenFor(model => model.CompanyNavigation.Previous)
+                @Html.HiddenFor(model => model.CompanyNavigation.Next)
+                @Html.HiddenFor(model => model.Company.Id)
+                @Html.HiddenFor(model => model.IsClaimed)
+            }
+        </div>
+    </div>
+    @if (registrations.Count > 0)
+    {
+        <div class="card-white px-4 pt-4 w-100">
+            <div class="row justify-content-between">
+                <div class="col-md-12 col-lg-12 pb-3">
+                    @foreach (var reg in registrations)
+                    {
+                        <div class="row mb-5">
+                            <div class="col-md-2">
+                                <div class="h5">@reg.Generated</div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="h5">
+                                    <strong> Intro email sent</strong>
+                                </div>
+                            </div>
+                            <div class="col"></div>
+                            <div class="col-md-4">
+                                <strong>FEEDBACK:</strong> @(reg.Registered == null ? "no" : reg.Registered.ToString())
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    @if (scheduledEmails.Count > 0)
+    {
+        <div class="card-white px-4 pt-4 w-100">
+            <div class="row justify-content-between">
+                <div class="col-md-12 col-lg-12">
+                    @foreach (var email in scheduledEmails)
+                    {
+                        <div class="row mb-5">
+                            <div class="col-md-3">
+                                <div class="h5">@email.CreatedAt</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="h5">
+                                    <strong> Intro email scheduled</strong>
+                                </div>
+                            </div>
+                            <div class="col"></div>
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    <div class="card-white px-4 pt-4 w-100">
+        <div class="row justify-content-between">
+            <div class="col-md-12 col-lg-12 pb-3">
+                <div class="row mb-5">
+                    <div class="col">
+                        <div class="h5"><strong>@ResourceString.Instance.Employees.ToUpper()</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal Email -->
+<div id="introMailModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        @using (Html.BeginForm("SendIntroMail", "Email", new { companyId = Model.Company.Id }, FormMethod.Post, new { style = "padding:0; margin:0;width:100%;" }))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <input name="subject" type="text" placeholder="subject" value="Discover Business Opportunities" class="form-control" />
+                    </p>
+                    <p>
+                        @Html.TextBoxFor(model => model.Company.Email, new { @class = "form-control" })
+                    </p>
+                    <p>
+                        <textarea rows="20" name="body" style="width: 100%;display: none">@Html.Raw(ViewBag.EmailText)
+                        </textarea>
+                        <div style="width: 100%">
+                            @Html.Raw(ViewBag.EmailText.Replace("cid:header", ViewBag.Header).Replace("cid:logo", ViewBag.Logo))
+                        </div>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Schedule" name="Schedule" class="btn btn-info" />
+                    <input type="submit" value="Send" name="Send" class="btn btn-primary" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal Delete Company -->
+<div id="deleteCompanyModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="text-align:center">
+                <h4 class="modal-title" style="width:100%;">@ResourceString.Instance.Delete @ResourceString.Instance.Company.ToLower()</h4>
+            </div>
+            <div class="modal-body" style="text-align:center">
+                @ResourceString.Instance.AreYouSure
+                @using (Html.BeginForm("Delete", "Companies", new
+                {
+                    id = Model.Company.Id,
+                    searchName = s.SearchName,
+                    searchIndustryCode = s.SearchIndustryCode,
+                    searchZipFrom = s.SearchZipFrom,
+                    searchZipTo = s.SearchZipTo,
+                    onlyUnprocessed = s.OnlyUnprocessed,
+                    n = ViewBag.N
+                }, FormMethod.Post, new { style = "padding:0; margin:0;width:100%;", id="searchform" }))
+                {
+                }
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success delete-company" data-dismiss="modal" style="text-decoration: none; color: white">
+                    @ResourceString.Instance.Delete
+                </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    @ResourceString.Instance.Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script>
+        function openModal() {
+            $('#deleteCompanyModal').modal('show');
+            return false;
+        };
+
+        $(function () {
+
+            $('a.toggle-skills').click(function () {
+                var target = $(this).nextAll('div.textBox:first');
+                $(".textBox").not(target).hide();
+                target.toggle();
+                return false;
+            });
+
+            $(".delete-company").click(function () {
+                $("#searchform").submit();
+            })
+
+            $('#skills-container').on('click', '.badge-close', function (event) {
+                let sender = $(event.target);
+                let skillId = sender.data('skill-id');
+                let skillName = sender.data('skill-name');
+
+                $.post({
+                    url: '@Url.Action("RemoveCompanySkill", "Companies")',
+                    data: {skillId: skillId, companyId: @Model.Company.Id},
+                    success: function () {
+                        $('#skills-container #' + skillId).remove();
+                        var newOption = new Option(skillName, skillId, true, true);
+                        $("#skills").append(newOption);
+
+                        $('#skills').val('').trigger('change');
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                })
+            });
+
+            $('#skills').on('select2:select', function () {
+                var skillId = $('.skill-name').val();
+                var skillName = $('.skill-name :selected').text();
+                addOrCreateSkill(skillName, skillId);
+            });
+
+            $('.create-skill').click(function () {
+                var skillName = $('#new-skill-name').val();
+                addOrCreateSkill(skillName);
+                $('#new-skill-name').val('')
+            });
+
+            $('#skills').select2({
+                width:'100%'
+            });
+            $('#skills').prepend($("<option></option>"));
+            $('#skills').val('').trigger('change');
+
+
+            @*$('#IndustryId').select2({
+                minimumInputLength: 0,
+                allowClear: true,
+                placeholder: 'Industry',
+                ajax: {
+                    url: '@Url.Action("IndustryCodeSelectTwo", "Companies")',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        var req = {
+                            pageSize: 20,
+                            page: params.page ? params.page : 1,
+                            term: params.term ? params.term : '',
+                        };
+
+                        return req;
+                    },
+                    processResults: function (data, params) {
+                        var page = params.page ? params.page : 1;
+                        var more = (page * 20) < data.TotalCount;
+                        return {
+                            results: data.Items,
+                            pagination: {
+                                more: more
+                            }
+                        };
+                    },
+                    cache: true,
+                }
+            });
+             $('#IndustryId').append($("<option></option>").attr("value", '@Model.Company.IndustryId').text('@(Model.Company.Industry?.Name ?? "")'));*@
+        });
+
+        function toggleAddSkills() {
+            var target = $('a.toggle-skills').nextAll('div.textBox:first');
+            $(".textBox").not(target).hide();
+            $('.textBox .skill-name').val('');
+            target.toggle();
+        }
+
+        function addOrCreateSkill(skillName, skillId) {
+            if (skillName) {
+                $.post({
+                    url: '@Url.Action("AddCompanySkill", "Companies")',
+                    data: { skillId: skillId, companyId: @Model.Company.Id, skillName: skillName },
+                    success: function (response) {
+                        console.log(response);
+                        var template = " <div class='col-auto' id='" + response.skillId + "' style='float:left;'>" +
+                            "<div class='badge badge-primary'>" +
+                            "<div class='form-row flex-nowrap align-items-center'>" +
+                            "<div class='col'>" + skillName + "</div>" +
+                            "<div class='col-auto' > " +
+                            "<div class='badge-close' data-skill-id='" + response.skillId + "' data-skill-name='" + skillName + "'>X</div>" +
+                            "</div>" +
+                            "</div>" +
+                            "</div>" +
+                            "</div>";
+
+                        $('#skills-container').prepend(template);
+                        $("#skills option[value=" + response.skillId + "]").remove();
+                        $('#skills').val('').trigger('change');
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+            }
+        }
+    </script>
+}

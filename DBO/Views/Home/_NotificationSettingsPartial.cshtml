@@ -1,0 +1,61 @@
+﻿@using DBO.Data.Models
+@model NotificationSettings
+
+@Html.Hidden("notification-id", Model.Id)
+@Html.HiddenFor(m => m.UserId, new { id = "notification-user-id" })
+
+<div style="margin-top:10px;">
+    <div style="margin-top:10px;">
+        <label class="form-label">@ResourceString.Instance.NotifyOnConnectionRequest</label>
+        @Html.CheckBoxFor(m => m.OnConnectionRequest, new { @class = "notify-settings" })
+    </div>
+    <div style="margin-top:10px;">
+        <label class="form-label">@ResourceString.Instance.NotifyOnConnectionAccepts</label>
+        @Html.CheckBoxFor(m => m.OnConnectionAccepts, new { @class = "notify-settings" })
+    </div>
+    <div style="margin-top:10px;">
+        <label class="form-label">@ResourceString.Instance.NotifyMeOnNewFollower</label>
+        @Html.CheckBoxFor(m => m.OnNewFollower, new { @class = "notify-settings" })
+    </div>
+</div>
+<br />
+<div style="margin-top:10px;">
+    <div style="margin-top:10px;">
+        <label class="form-label">@ResourceString.Instance.NotifyOnesADay</label>
+        @Html.RadioButton("NotificationIteration", (int)NotificationIteration.OnesADay, Model.NotificationIteration == NotificationIteration.OnesADay, new { @class = "iteration-settings" })
+    </div>
+    <div style="margin-top:10px;">
+        <label class="form-label">@ResourceString.Instance.NotifyOnesAWeek</label>
+        @Html.RadioButton("NotificationIteration", (int)NotificationIteration.OnesAWeek, Model.NotificationIteration == NotificationIteration.OnesAWeek, new { @class = "iteration-settings" })
+    </div>
+    <div style="margin-top:10px;">
+        <label class="form-label">@ResourceString.Instance.DontWantToRecieveNotification</label>
+        @Html.RadioButton("NotificationIteration", (int)NotificationIteration.WithoutNotification, Model.NotificationIteration == NotificationIteration.WithoutNotification, new { @class = "iteration-settings" })
+    </div>
+</div>
+
+<script>
+    $(".notify-settings,.iteration-settings").change(function () {
+
+            var id = $("#notification-id").val();
+            var userId = $("#notification-user-id").val();
+            var onConnectionRequest = $(".notify-settings[name='OnConnectionRequest']").is(":checked");
+            var onConnectionAccepts = $(".notify-settings[name='OnConnectionAccepts']").is(":checked");
+            var onNewFollower = $(".notify-settings[name='OnNewFollower']").is(":checked");
+            var notificationIteration = $("input:radio[name='NotificationIteration']:checked").val();
+
+            $.ajax({
+                url: "@Url.Action("UpdateNotificationSettings", "Home")",
+                type: "POST",
+                data: {
+                    id: id,
+                    userId: userId,
+                    onConnectionRequest: onConnectionRequest,
+                    onConnectionAccepts: onConnectionAccepts,
+                    onNewFollower: onNewFollower,
+                    notificationIteration: notificationIteration
+                }
+            })
+        });
+</script>
+

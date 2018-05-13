@@ -1,0 +1,32 @@
+﻿@{
+    var ads = (ViewBag.Ads as IEnumerable<DBO.Data.ViewModels.DisplayAdViewModel>).Take(8);
+}
+
+@foreach (var item in ads)
+{
+    string adStyle = "max-width: 250px;";
+    if (!item.IsFullWidth) { adStyle = "padding: 10px;" + adStyle; }
+
+    if (item.Type == DBO.Data.Models.AdvertisementType.Image)
+    {
+        <div class="card-white" style="@adStyle">
+            <a href="/ads/open/@item.Id">
+                <img src="@item.FilePath" alt="" width="443px">
+            </a>
+            <div class="ml-2" style="padding:0;margin:0;"><strong>@item.Headline</strong></div>
+            <div class="ml-2" style="font-size:12px;padding:0;margin:0;">@item.Text</div>
+        </div>
+    }
+    else
+    {
+        <div class="card-white">
+            <a href="/ads/open/@item.Id">
+                <video style="background-color:transparent; max-width: 250px" muted  loop autoplay src="@item.FilePath" class="video-js"></video>
+            </a>
+            <div class="ml-2" style="padding:0;margin:0; overflow:hidden"><strong>@item.Headline</strong></div>
+            <div class="ml-2" style="font-size:12px;padding:0;margin:0;overflow:hidden">@item.Text</div>
+        </div>
+    }
+
+
+}

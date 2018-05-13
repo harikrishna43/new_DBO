@@ -1,0 +1,197 @@
+﻿@model DBO.Data.Models.Company
+@{
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+
+<section class="section-cards pt-3">
+    <div class="col-md-offset-2 col-md-10">
+        <div>
+            @Html.ActionLink((string)ResourceString.Instance.BackToList, "Index")
+        </div>
+    </div>
+
+    <div class="container-fluid">
+
+        @using (Html.BeginForm())
+        {
+            <div class="row">
+                <div class="card-white px-4 pt-4 w-100">
+                    <div class="row justify-content-between">
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+
+                        <div class="col-md-6">
+                            <div class="row mb-5">
+                                <div class="col">
+                                    <div class="h5"><strong>@ResourceString.Instance.Company.ToUpper()</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Name)
+                                </div>
+                                <div class="col col-sm-9">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Name, new {@class = "form-control"})
+                                        @Html.ValidationMessageFor(model => model.Name)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Address)
+                                </div>
+                                <div class="col col-sm-9">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Address, new {@class = "form-control"})
+                                        @Html.ValidationMessageFor(model => model.Address)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-3 col-xs-3 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.PostCode)
+                                </div>
+                                <div class="col-3 col-xs-3">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.PostCode, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.PostCode)
+                                    </div>
+                                </div>
+                                <div class="col-1 col-xs-2 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.City)
+                                </div>
+                                <div class="col-5 col-xs-4">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.City, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.City)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Country)
+                                </div>
+                                <div class="col col-sm-9">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Country, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Country)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Phone)
+                                </div>
+                                <div class="col col-sm-9">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Phone, new {@class = "form-control"})
+                                        @Html.ValidationMessageFor(model => model.Phone)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.CVR)
+                                </div>
+                                <div class="col col-sm-9">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.CVR, new {@class = "form-control"})
+                                        @Html.ValidationMessageFor(model => model.CVR)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row mb-5">
+                                <div class="col">
+                                    <div class="h5"><strong>@ResourceString.Instance.ContactInfo.ToUpper()</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.PersonName)
+                                </div>
+                                <div class="col col-sm-9 col-xl-8">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.PersonName, new {@class = "form-control"})
+                                        @Html.ValidationMessageFor(model => model.PersonName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Chairman)
+                                </div>
+                                <div class="col col-sm-9 col-xl-8">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Chairman, new {@class = "form-control"})
+                                        @Html.ValidationMessageFor(model => model.Chairman)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Email)
+                                </div>
+                                <div class="col col-sm-9 col-xl-8">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Email, new {@class = "form-control"})
+                                        @Html.ValidationMessageFor(model => model.Email)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Chairman)
+                                </div>
+                                <div class="col col-sm-9 col-xl-8">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Chairman, new {@class = "form-control"})
+                                        @Html.ValidationMessageFor(model => model.Chairman)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Owner)
+                                </div>
+                                <div class="col col-sm-9 col-xl-8">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Owner, new {@class = "form-control"})
+                                        @Html.ValidationMessageFor(model => model.Owner)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group align-items-center">
+                                <div class="col-5 col-sm-3 col-xl-4 gray mb-lg-2">
+                                    @Html.LabelFor(model => model.Web)
+                                </div>
+                                <div class="col col-sm-9 col-xl-8">
+                                    <div class="mb-lg-2">
+                                        @Html.TextBoxFor(model => model.Web, new {@class = "form-control"})
+                                        @Html.ValidationMessageFor(model => model.Web)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="@ResourceString.Instance.Create" class="btn btn-primary"/>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

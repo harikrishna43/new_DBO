@@ -1,0 +1,14 @@
+﻿@model int
+
+<button class="btn btn-success col-sm-12" style="font-size:  13px;
+                                                text-align:  left;
+                                                padding: 10px;
+                                                color:#212529">
+    <span class="fa fa-plug" style="margin:auto 10px auto 10px;"></span>
+    @ResourceString.Instance.Connected
+</button>
+
+@{ 
+    var label = ResourceString.Instance.Disconnect as string;
+}
+@Html.ActionLink(label, "Disconnect", "Connections", new { companyId = Model }, new { style = "color:gray; text-decoration:none;font-size:12px; margin-top:10px", @class="pull-right" })

@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout_Master.cshtml";
+    Func<string, string> getClassByController = x =>
+    {
+        return (string)ViewContext.RouteData.Values["Controller"] == x ? "nav-item nav-link active uppercase" : "nav-item nav-link uppercase";
+    };
+}
+
+<nav class="navbar navbar-dark navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="~/home/index">
+            <p id="company-logo-large">DBO</p>
+            <p id="company-logo-small">Discover Business Opportunities</p>
+        </a>
+        <div class="text-right order-lg-2 ml-auto">
+            @Html.Partial("_LoginPartial")
+        </div>
+    </div>
+</nav>
+
+<nav class="menu menu-2 nav nav-pills nav-justified">
+    @{
+        var companies = ResourceString.Instance.Companies as string;
+        var registrations = ResourceString.Instance.Registrations as string;
+        var claims = ResourceString.Instance.Claims as string;
+        var scheduledEmails = ResourceString.Instance.ScheduledEmails as string;
+        var translations = ResourceString.Instance.Translations as string;
+        var languages = ResourceString.Instance.Languages as string;
+        var templates = ResourceString.Instance.Templates as string;
+        var documents = ResourceString.Instance.Documents as string;
+    }
+
+    @Html.ActionLink(companies, "Index", "Companies", null, new { @class = getClassByController("Companies") })
+    @Html.ActionLink(registrations, "Index", "Registrations", null, new { @class = getClassByController("Registrations") })
+    @Html.ActionLink(claims, "Index", "Claims", null, new { @class = getClassByController("Claims") })
+    @Html.ActionLink(scheduledEmails, "Index", "ScheduledEmails", null, new { @class = getClassByController("ScheduledEmails") })
+    @Html.ActionLink(translations, "Index", "Translations", null, new { @class = getClassByController("Translations") })
+    
+    @*For later*@
+    @*@Html.ActionLink(languages, "Index", "Languages", null, new { @class = getClassByController("Languages") })
+    @Html.ActionLink(documents, "Index", "Documents", null, new { @class = getClassByController("Documents") })*@
+</nav>
+
+@RenderBody()
+
+@RenderSection("scripts", required: false)

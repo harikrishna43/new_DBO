@@ -1,0 +1,44 @@
+﻿@{
+    var usersCompany = Html.Action("GetUserCompany", "Business").ToString();
+}
+
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+<div class="btn-group">
+    @if (usersCompany != "")
+    {
+        <a class="btn" href="/Business/Details/@usersCompany">
+            <i class="fa fa-home" aria-hidden="true"></i>
+        </a>
+    }
+    @Html.Action("CheckForNotifications", "Home")
+    <a class="btn">
+        <i class="fa fa-code-fork" aria-hidden="true"></i>
+    </a>
+    <a class="btn">
+        <i class="fa fa-male" aria-hidden="true"></i>
+    </a>
+    <div class="dropdown">
+        <a class="btn" data-toggle="dropdown" id="settings-dropdown" aria-haspopup="true" aria-expanded="true">
+            <i class="fa fa-cog" aria-hidden="false"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="#settings-dropdown">
+            @if (usersCompany != "")
+            {
+                @Html.ActionLink((string)ResourceString.Instance.BasicData.ToUpper(), "basicdata", new { controller = "home", id = usersCompany }, new { @class = "dropdown-item" })
+            }
+            @*else
+                {
+                    @Html.ActionLink((string)ResourceString.Instance.BasicData.ToUpper(), "index", new { controller = "home" }, new { @class = "dropdown-item" })
+                }*@
+            <a href="/ads/" class="dropdown-item">ADVERTISEMENT</a>
+            <a href="#" class="dropdown-item">JOB TASKS</a>
+            @if (Request.IsAuthenticated)
+            {
+                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    <a href="javascript:document.getElementById('logoutForm').submit()" class="dropdown-item">LOG OUT</a>
+                }
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,101 @@
+﻿@using DBO.Common
+@model DBO.Data.ViewModels.BaseCompanyInfoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout_Public.cshtml";
+}
+<link href="~/Content/registration.css" rel="stylesheet" />
+<div class="container-fluid" id="fullScreenDiv">
+
+    <div id="overlay">
+        <div class="container submit">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 statements-container">
+                    <div class="statements">
+                        <p>
+                            Vi er undervejs med et medie <span>for</span> virksomheder
+                            <span>til</span>
+                            virksomheder, hvor du som virksomhed vil kunne:<span class="statement"></span>
+                        </p>
+                        <ul>
+                            <li>Søge efter virksomheder / produkter</li>
+                            <li>Søge i erhvervsnyheder</li>
+                            <li>Søge i licitationer</li>
+                            <li>Connecte med nuværende samt kommende leverandører</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 submit-form">
+                    @using (Html.BeginForm("Register", "Home", FormMethod.Post))
+                    {
+                    <div class="row form-container">
+                        <div class="col-sm-12 headline">
+                            Tilmeld dig nu
+                        </div>
+                        <div class="col-sm-12 sub-headline">
+                            Og få besked så snart vi er i luften
+                        </div>
+                        <div class="form-group">
+                            <input checked="checked" id="Role" name="Role" style="margin-left:15px;-ms-transform: scale(1.5);-webkit-transform: scale(1.5);transform:scale(1.5);" type="radio" value="@DBO.Common.Constants.CompanyRole">
+                            <label class="white">Company</label>
+                            <input id="Role" name="Role" style="margin-left:35px;-ms-transform: scale(1.5);-webkit-transform: scale(1.5);transform:scale(1.5); " type="radio" value="@DBO.Common.Constants.EmployeeRole">
+                            <label class="white">Private person</label>
+                            <span class="field-validation-valid text-danger" data-valmsg-for="Role" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="col-sm-12" id="cvrLabel">
+                            CVR
+                        </div>
+                        <div class="col-sm-12" id="cvrInput">
+                            @Html.TextBoxFor(model => model.Cvr, new { @class = "col-sm-12" })
+                        </div>
+                        <div class="col-sm-12" id="NameLabel">
+                            Firmanavn
+                        </div>
+                        <div class="col-sm-12">
+                            @Html.TextBoxFor(model => model.Name, new { @class = "col-sm-12" })
+                        </div>
+                        <div class="col-sm-12">
+                            Email
+                        </div>
+                        <div class="col-sm-12">
+                            @Html.TextBoxFor(model => model.Email, new { @class = "col-sm-12" })
+                        </div>
+                        <div class="col-sm-12">
+                            <input name="Tilmeld" value="Ja tak, jeg vil gerne have besked" type="submit" class="col-sm-12">
+                        </div>
+                        <div class="col-sm-12 sub-headline" style="color: red;">
+                            @Html.ValidationSummary(true)
+                        </div>
+                    </div>
+                        @Html.HiddenFor(model => model.CompanyId)
+                        @Html.HiddenFor(model => model.Token)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script>
+        $("input[value='employee']").on("click", function () {
+            $("#NameLabel")[0].innerHTML = "Navn"; 
+            $("#cvrLabel").hide();
+            $("#cvrInput").hide();
+        });
+        $("input[value='company']").on("click", function () {
+            $("#NameLabel")[0].innerHTML = "Firmanavn"; 
+            $("#cvrLabel").show();
+            $("#cvrInput").show();
+        });
+
+    @if (ViewBag.Role == Constants.EmployeeRole)
+        {
+        <text>
+            $("input[value='employee']").click();
+        </text>
+        }
+</script>
+}

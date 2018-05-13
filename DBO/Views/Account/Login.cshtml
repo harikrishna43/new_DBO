@@ -1,0 +1,36 @@
+﻿@using DBO.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = ResourceString.Instance.LogIn;
+    Layout = "~/Views/Shared/_Layout_Public.cshtml";
+}
+
+<section class="section-bunner d-flex flex-column justify-content-end">
+    <div class="form-wrap">
+        <div class="d-flex justify-content-center">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
+            {
+                @*@Html.AntiForgeryToken()*@
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder="Email" })
+                </div>
+                <div class="form-group">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder="Password" })
+                </div>
+                <div class="form-group">
+                    <div class="">
+                        <input type="submit" value=@ResourceString.Instance.LogIn class="btn btn-dark btn-block" />
+                    </div>
+                </div>
+                @*<p>
+                    @Html.ActionLink("Register as a new user", "Register")
+                </p>*@
+            }
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

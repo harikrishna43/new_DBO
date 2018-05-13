@@ -1,0 +1,30 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<div class="container">
+    <h2>Admin Tools</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <p>
+                <a href="/companies">Edit companies</a>
+            </p>
+        </div>
+        <div class="col-md-3">
+            <p>
+                <a href="/companyskills">Companies skills</a>
+            </p>
+        </div>
+        <div class="col-md-3">
+            <p>
+                <a href="/skills">Edit all skills</a>
+            </p>
+        </div>
+        <div class="col-md-3">
+            <p>
+                @Html.ActionLink("Manage employments", "Employments", "Companies")
+            </p>
+        </div>
+    </div>
+    <br /><br />
+</div>

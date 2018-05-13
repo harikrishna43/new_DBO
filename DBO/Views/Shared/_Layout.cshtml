@@ -1,0 +1,113 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout_Master.cshtml";
+}
+
+@{
+    Func<string, string, string> getClassNameByAction = (controller, action) =>
+    {
+        var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+        var actionName = this.ViewContext.RouteData.Values["action"].ToString();
+
+        if (controller != null && action != null
+        && string.Equals(controller, controllerName, StringComparison.OrdinalIgnoreCase)
+        && string.Equals(action, actionName, StringComparison.OrdinalIgnoreCase))
+        {
+            return "active";
+        }
+        else
+        {
+            return string.Empty;
+        }
+    };
+}
+@if (ViewBag.ReturnToAdmin != true)
+{
+    <div class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-6 header__logo">
+                    <span>DBO</span><br />
+                    Discover Business Opportunities
+                </div>
+                <div class="col-6">
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </div>
+        <nav class="menu nav nav-pills nav-justified">
+            <a class='nav-item nav-link @getClassNameByAction("home","index") uppercase' href="/home/index">@ResourceString.Instance.Companies</a>
+            <a class='nav-item nav-link @getClassNameByAction("home","newsfeed") uppercase' href="/home/newsfeed">@ResourceString.Instance.NewsFeeds</a>
+            <a class="nav-item nav-link uppercase" href="#">@ResourceString.Instance.JobExchange</a>
+        </nav>
+
+    </div>
+}
+
+<div style="background-color: #fff;">
+    <div class="container" style="padding: 0px;">
+        <div class="text-right">
+            @Html.Partial("_MenuPartial")
+        </div>
+    </div>
+</div>
+
+@RenderBody()
+
+<section class="section-google shadow-effect">
+    <div class="row">
+        @Html.Action("DisplayAds", "Ads", new { viewName = "DisplayAds_Bottom" })
+    </div>
+</section>
+
+<section class="section-text footer">
+    <div class="footer__inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm first footer__logo">
+                    <span>DBO</span>
+                    Discover Business Opportunities
+                </div>
+                <div class="col-sm second footer__navigation">
+                    <span>@ResourceString.Instance.Information</span>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="">@ResourceString.Instance.About DBO</a>
+                        </li>
+                        <li>
+                            <a href="">@ResourceString.Instance.TermsOfUse</a>
+                        </li>
+                        <li>
+                            <a href="">Cookies & @ResourceString.Instance.PrivacyPolicy.ToLower()</a>
+                        </li>
+                        <li>
+                            <a href="">@ResourceString.Instance.Advertising</a>
+                        </li>
+                        <li>
+                            <a href="">@ResourceString.Instance.Press</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm third footer__navigation">
+                    <span>@ResourceString.Instance.Service</span>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="">@ResourceString.Instance.ContactInformation</a>
+                        </li>
+                        <li>
+                            <a href="">@ResourceString.Instance.ReportAbuse</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col footer__creditcards">
+                    <img src="/img/visa-curved-64px.png" />
+                    <img src="/img/mastercard-curved-64px.png" />
+                    <img src="/img/maestro-curved-64px.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@RenderSection("scripts", required: false)

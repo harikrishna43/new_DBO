@@ -1,0 +1,62 @@
+﻿@using System.Linq
+@using DBO.Data.Models
+@model IEnumerable<Resource>
+@{
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+    var languages = ViewBag.Languages as List<Language>;
+}
+<style>
+    .table.table-square thead tr th {
+        border: 1px solid gray;
+        color: gray;
+        font-weight: normal;
+    }
+
+    .linkButton {
+        background: none;
+        border: none;
+        color: #007bff;
+        cursor: pointer;
+        background-color: transparent;
+    }
+</style>
+<section class="section-cards pt-3">
+    <p id="successMessage" class="text-success"></p>
+    <p id="errorMessage" class="text-danger"></p>
+    <div class="container-fluid" style="margin:0;padding:0;">
+        <h3 style="text-align:center">@ResourceString.Instance.Name : @Model.FirstOrDefault().Name</h3>
+        @foreach (var language in languages)
+        {
+            var resource = Model.FirstOrDefault(x => x.LanguageId == language.Id);
+
+            using (Ajax.BeginForm("Edit", new { name = resource != null ? resource.Name : "" }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "showSuccessMessage", OnFailure = "showErrorMessage" }))
+            {
+                @Html.Hidden("Id",resource != null ? resource.Id.ToString() : "")
+                @Html.Hidden("Name", resource != null ? resource.Name : "")
+                @Html.Hidden("LanguageId", language.Id)
+                <div class="form-container" style="margin-bottom:30px;">
+                    @Html.TextBox("Value", resource != null ? resource.Value : "", new { @class = "form-control col-md-5", style = "float:left; margin:10px; " })
+                    @Html.TextBox("Language", language.Name, new { disabled = "disabled", @class = "form-control col-md-5", style = "float:left;margin:10px;" })
+                    <button type="submit" class="btn btn-success" style="margin:10px">@ResourceString.Instance.Save</button>
+                </div>
+            }
+
+        }
+    </div>
+</section>
+
+
+@section scripts{
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.5/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ajax-unobtrusive@3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.5.5/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        function showSuccessMessage(data) {
+            $('#successMessage').show().html(data).delay(3000).fadeOut();
+        }
+        function showErrorMessage(data) {
+            $('#errorMessage').show().html(data.statusText).delay(3000).fadeOut('slow');
+        }
+    </script>
+}

@@ -1,0 +1,592 @@
+﻿@model DBO.Data.ViewModels.AdvertisementViewModel
+@using DBO.Data.Models
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var skills = ViewBag.Skills as List<SelectListItem>;
+    var industries = ViewBag.Industries as List<SelectListItem>;
+    Func<AdvertisementStatus, string> disable = (x) =>
+    {
+        if (Model.Status == x)
+        {
+            return "disabled";
+        }
+
+        return string.Empty;
+    };
+    var headlineLength = !string.IsNullOrEmpty(Model.Headline) ? Model.Headline.ToCharArray().Length : 0;
+    var textLength = !string.IsNullOrEmpty(Model.Text) ? Model.Text.ToCharArray().Length : 0;
+}
+<link rel="stylesheet" href="~/Content/bootstrap-multiselect.css" />
+<link rel="stylesheet" href="~/Content/ads.css" />
+<section class="section-cards">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 d-none d-lg-block">
+
+                <div class="card-white pad p-3 pl-4" style="min-height: 541px">
+                    <p>@*Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem sed maiores, dicta nostrum. Fugiat aliquam, impedit facilis, libero fugit repellat, aut earum fuga neque dolorem est aperiam laborum dolorum numquam.*@</p>
+                </div>
+
+                <div class="card-white pad p-3 pl-4" style="min-height: 541px">
+                </div>
+
+            </div>
+            <div class="col-lg-6">
+                <div id="companies-section">
+
+                    <div class="row justify-content-lg-center">
+                        <div class="col-lg-12 d-none d-lg-block">
+                            <div class="card-header pad p-3 pl-4 mb-2">
+                                <strong>@ResourceString.Instance.Edit</strong>
+                            </div>
+
+                            @using (Html.BeginForm())
+                            {
+                                @*@Html.AntiForgeryToken()*@
+                                @Html.HiddenFor(m => m.Id)
+                                @Html.HiddenFor(m => m.UserId)
+                                @Html.HiddenFor(m => m.CompanyId)
+                                @Html.HiddenFor(m => m.Status, new { id = "ad-status" })
+                                <div class="card-white pad p-3">
+                                    <p class="card-title">@ResourceString.Instance.TargetGroup</p>
+                                    <div class="pad pt-2 pl-4 pr-4">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">@ResourceString.Instance.Locations</label>
+                                            <div class="col-sm-9">
+                                                @Html.DropDownList("LocationType", (IEnumerable<SelectListItem>)ViewBag.LocationType, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" id="location-country" style="display:none;">
+                                            <label class="col-sm-3 col-form-label">@ResourceString.Instance.ChooseCountry:</label>
+                                            <div class="col-sm-9">
+                                                @Html.DropDownList("Location", (IEnumerable<SelectListItem>)ViewBag.CountriesList, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" id="location-cities" style="display:none;">
+                                            <label class="col-sm-3 col-form-label">@ResourceString.Instance.ChooseCities:</label>
+                                            <div class="col-sm-9">
+                                                @Html.TextBox("Location", Model.LocationType == LocationType.Cities ? Model.Location : string.Empty, null, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.Location, null, new { @class = "text-danger", style = "font-size:12px;" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">@ResourceString.Instance.IndustryCode</label>
+                                            <div class="col-sm-9">
+                                                @Html.ListBoxFor(m => m.SelectedIndustries, industries, new { @class = "multi-select" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">@ResourceString.Instance.Skills</label>
+                                            <div class="col-sm-9">
+                                                @Html.ListBoxFor(m => m.SelectedSkills, skills, new { @class = "multi-select" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">@ResourceString.Instance.ShowAdFor:</label>
+                                            <div class="col-sm-9">
+                                                <div class="form-group row">
+                                                    <div class="col-lg-4">
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.ApearOnLogin, new { @class = "form-check-input" })
+                                                            <label class="form-check-label" for="customControlAutosizing">@ResourceString.Instance.LoggedIn</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.ApearOnLogout, new { @class = "form-check-input" })
+                                                            <label class="form-check-label" for="customControlAutosizing">@ResourceString.Instance.NotLoggedIn</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-lg-4">
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.ApearForPrivatePerson, new { @class = "form-check-input" })
+                                                            <label class="form-check-label" for="customControlAutosizing">@ResourceString.Instance.PrivatePerson</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.ApearForCompany, new { @class = "form-check-input" })
+                                                            <label class="form-check-label" for="customControlAutosizing">@ResourceString.Instance.Company</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-white pad p-3">
+                                    <p class="card-title pl-2">Content</p>
+                                    <div class="pad pt-2 pl-4 pr-4">
+                                        <div class="row">
+                                            <label class="col-sm-2 col-form-label mt-3">@ResourceString.Instance.Headline</label>
+                                            <div class="col-sm-10">
+                                                <span style="font-size:10px;">Max 50 charcter</span>
+                                                @Html.TextBoxFor(m => m.Headline, new { @class = "form-control", maxlength = "50" })
+                                                <span class="pull-right" style="font-size:10px;"><text id="headline-character-counter">@(50 - headlineLength)</text> @ResourceString.Instance.CharactersLeft.ToLower()</span>
+                                                @Html.ValidationMessageFor(m => m.Headline, null, new { @class = "text-danger", style = "font-size:12px;" })
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <label class="col-sm-2 col-form-label mt-3">@ResourceString.Instance.Text</label>
+                                            <div class="col-sm-10">
+                                                <span style="font-size:10px;">Max 200 character</span>
+                                                @Html.TextAreaFor(m => m.Text, new { @class = "form-control", maxlength = "200" })
+                                                <span class="pull-right" style="font-size:10px;"><text id="text-character-counter">@(200 - textLength)</text> @ResourceString.Instance.CharactersLeft.ToLower()</span>
+                                                @Html.ValidationMessageFor(m => m.Text, null, new { @class = "text-danger", style = "font-size:12px;" })
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top:15px;margin-bottom:15px;">
+                                            <label class="col-sm-6">@ResourceString.Instance.SelectAdvertisementType:</label>
+                                            <div class="col-sm-6">
+                                                @Html.DropDownList("Type", (IEnumerable<SelectListItem>)ViewBag.AdvertisementTypes, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-sm-2 col-form-label" id="type-label">@(Model.Type == AdvertisementType.Image ? ResourceString.Instance.Image : ResourceString.Instance.Video)</label>
+                                            <div class="col-sm-10 mt-3">
+                                                <div class="col-sm-4" style="float:left">
+                                                    <div class="image-width">
+                                                        @Html.RadioButton("IsFullWidth", "True", Model.IsFullWidth == true, new { @class = "form-check-input" })
+                                                        <label class="form-check-label" for="customControlAutosizing">@ResourceString.Instance.FullWidth <br />(250px x 150px)</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4" style="float:left">
+                                                    <div class="image-width">
+                                                        @Html.RadioButton("IsFullWidth", "False", Model.IsFullWidth == false, new { @class = "form-check-input" })
+                                                        <label class="form-check-label" for="customControlAutosizing">@ResourceString.Instance.WithMargin<br /> (230px x 120px)</label>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <button type="button" onclick="$('#file-input').click()" class="btn btn-default pull-right">@ResourceString.Instance.Upload</button>
+                                                    <label id="imageName"></label>
+                                                    <input type="file" name="file" accept="image/*" id="file-input" placeholder="@ResourceString.Instance.AddFile" style="font-size:11px;display:none;">
+                                                    @Html.ValidationMessageFor(m => m.FilePath, null, new { @class = "text-danger", style = "font-size:12px;" })
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="offset-md-2 col-lg-6" id="file-content">
+                                                <input type="hidden" name="FilePath" id="file-field" />
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <button type="button" class="btn btn-default pull-right" id="select-crop" hidden>@ResourceString.Instance.SelectImage</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <label class="col-sm-2 col-form-label">Link</label>
+                                            <div class="col-sm-10">
+                                                <div class="row">
+                                                    @if (!Model.IsAdmin)
+                                                    {
+                                                        <div class="col-sm-4 mt-2">
+                                                            @Html.RadioButtonFor(m => m.LinkToProfile, Model.LinkToProfile, new { name = "link" })
+                                                            <label>
+                                                                @ResourceString.Instance.ProfilePage
+                                                            </label>
+                                                        </div>
+                                                        <span class="col-sm-8 mt-2 p-0">@ResourceString.Instance.Or</span>
+                                                    }
+                                                    <div class="col-sm-4 mt-2">
+                                                        @if (Model.IsAdmin)
+                                                        {
+                                                            @Html.RadioButtonFor(m => m.LinkToProfile, !Model.LinkToProfile, new { @checked = "checked", name = "link" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.RadioButtonFor(m => m.LinkToProfile, !Model.LinkToProfile, new { name = "link" })
+                                                        }
+                                                        <label>
+                                                            @ResourceString.Instance.ExternalLink
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-8 p-0">
+                                                        @Html.TextBoxFor(m => m.Link, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(m => m.Link, null, new { @class = "text-danger", style = "font-size:12px;" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-white pad p-3">
+                                    <p class="card-title pl-2">@ResourceString.Instance.Statistics</p>
+                                    <div class="pad pt-2 pl-4 pr-4">
+                                        <div class="row col-sm-12 mb-4">
+                                            @ResourceString.Instance.Status: @Model.Status.ToString()
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <label class="col-xs-12">@ResourceString.Instance.AdOpened: <span>@Model.ClicksCount</span></label>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label class="col-xs-12">@ResourceString.Instance.BudgetSpent: <span>@Model.BudgetSpent </span></label>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label class="col-xs-12">@ResourceString.Instance.RemainingBudget: <span>@Model.Budget </span></label>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4 col-sm-12 ad-manage">
+                                            <label class="mt-2">@ResourceString.Instance.Manage:</label>
+                                            <div class="col-sm-2">
+                                                <button type="button" class="btn btn-default col-xs-4" @disable(AdvertisementStatus.Stopped) onclick="changeStatus('2')">@ResourceString.Instance.Stop</button>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <button class="btn btn-default col-xs-4" @disable(AdvertisementStatus.Paused) onclick="changeStatus('1')">@ResourceString.Instance.Pause</button>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <button class="btn btn-default col-xs-4" @disable(AdvertisementStatus.Active) onclick="changeStatus('0')">@ResourceString.Instance.Resume</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-white pad p-3">
+                                    <p class="card-title">@ResourceString.Instance.Payment</p>
+                                    <div class="pt-2 pl-4 pr-4">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label mt-4">@ResourceString.Instance.TotalBudget</label>
+                                            <div class="col-sm-3">
+                                                <span style="font-size:10px;">Min 500 kr</span>
+                                                @Html.TextBoxFor(m => m.Budget, new { @class = "form-control", @readonly = "readonly" })
+                                            </div>
+                                            <label class="col-sm-3 col-form-label mt-4">@ResourceString.Instance.PricePerClick</label>
+                                            <div class="col-sm-3">
+                                                <span style="font-size:10px;">Min 1 kr</span>
+                                                @Html.TextBoxFor(m => m.ClickPrice, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        <p style="font-size:12px;">
+                                            Lorem ipsum dolor sit amet, nobis singulis eam et, ea cum tota brute appellantur. Audire invenire eloquentiam ius te, eu simul argumentum has, quem volutpat mea at. Vix ne sint tation, ad eos facer propriae. Ad eam tritani voluptaria disputationi, id sea laudem graece probatus, id dico vide eos. Vim at mucius luptatum euripidis, mea te velit eirmod gloriatur.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col text-right">
+                                        @*<button type="submit" class="btn btn-default">@ResourceString.Instance.ContinueToPayment</button>*@
+                                        <button type="submit" class="btn btn-success">@ResourceString.Instance.Save</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 d-none d-lg-block">
+
+                <div class="card-white pad p-3 pl-4" style="min-height: 541px">
+                    <p>@*Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem sed maiores, dicta nostrum. Fugiat aliquam, impedit facilis, libero fugit repellat, aut earum fuga neque dolorem est aperiam laborum dolorum numquam.*@</p>
+                </div>
+
+                <div class="card-white pad p-3 pl-4" style="min-height: 541px">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-google">
+    <div class="container">
+
+    </div>
+</section>
+
+<div class="modal fade" id="transferBudgetModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="transferBudgetModal_pl">
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="cropModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="img-container">
+                    <img style="max-width:100%" id="modal-image" src="" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">@ResourceString.Instance.Cancel</button>
+                <button id="crop-image-btn" type="button" class="btn btn-primary" data-dismiss="modal">@ResourceString.Instance.Select</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/bootstrap-multiselect.js"></script>
+
+@section scripts {
+    @*<script src="https://maps.googleapis.com/maps/api/js?key=@(ViewBag.GoogleApiKey)&amp;libraries=places" type="text/javascript"></script>*@
+    <script>
+            var adType = {
+                Image: "0",
+                Video: "1"
+            };
+
+            var locationType = {
+                WithoutLocation: "0",
+                Country: "1",
+                Cities: "2"
+            };
+
+            var displayStatusType = {
+                Show: "0",
+                Hide: "1"
+            }
+            var headlineMaxCount = 50;
+            var textMaxCount = 200;
+
+            var input = document.getElementById('file-input');
+            var selectCrop = document.getElementById('select-crop');
+            var fileField = document.getElementById('file-field');
+            var form = document.getElementById('ads-form');
+            var firstLoad = true;
+            var newBlob;
+            var adFile;
+            var typeId;
+
+            //function initialize() {
+            //    var options = {
+            //        types: ['(regions)']
+            //    };
+            //    var input = document.getElementById('locationSearchField');
+            //    var autocomplete = new google.maps.places.Autocomplete(input, options);
+            //}
+
+            function changeStatus(status) {
+                if (status === '2') {
+                    $(".ad-manage button").attr('disabled', false);
+                    $(".ad-manage button[type='button']").attr('disabled', true);
+                    $.ajax({
+                        url: "/Ads/StopAd/",
+                        type: "POST",
+                        data: {
+                            id: "@Model.Id"
+                        },
+                        success: function (data) {
+                            if (data.NoRemainingBudget === true) {
+                                window.location.href = "@Url.Action("Index","Ads")";
+                            } else {
+                                $("#transferBudgetModal_pl").html(data);
+                                $("#transferBudgetModal").modal("show");
+                            }
+                        }
+                    })
+                }
+                else {
+                    document.getElementById('ad-status').value = status;
+                }
+            }
+
+            function changeAdvertisementType() {
+                    isTypeChanged = true;
+                    typeId = $("#Type").val();
+                    adFile = $("#file");
+                    if (adFile.length) {
+                        $(adFile).remove();
+                    }
+                    if (typeId == adType.Image) {
+                        $('#file-input').attr("accept", "image/*");
+                        $(".image-width").show();
+                        $("#type-label").text("@ResourceString.Instance.Image");
+                        $("#file-content").append('<img id="file" class="rounded" style="width:250px;max-height:150px;" />');
+                    }
+                    else {
+                        $('#file-input').attr("accept", "video/*");
+                        $(".image-width").hide();
+                        $("#type-label").text("@ResourceString.Instance.Video");
+                        $("#file-content").append('<video style="display:none;" id="file" class="video-js rounded" controls preload="auto" width="250" height="150"></video>');
+                        if (firstLoad) {
+                            firstLoad = false;
+                            $("#file").show();
+                        }
+                    }
+                    adFile = document.getElementById('file');
+        }
+
+
+        function changeStatusForLocation(id, type, locType) {
+            switch (type) {
+                case displayStatusType.Show:
+                    $("#" + id).show();
+                    $("#" + id).find("[name='Location']").attr("readonly", false).attr("disabled", false);
+                    break;
+                case displayStatusType.Hide:
+                    $("#" + id).hide();
+                    $("#" + id).find("[name='Location']").attr("readonly", true).attr("disabled", true);
+                    break;
+            }
+        }
+
+        function changeLocationType() {
+            var typeId = $("#LocationType").val();
+            switch (typeId) {
+                case locationType.WithoutLocation: {
+                    changeStatusForLocation("location-country", displayStatusType.Hide);
+                    changeStatusForLocation("location-cities", displayStatusType.Hide, locationType.WithoutLocation);
+                    break;
+                }
+                case locationType.Country: {
+                    changeStatusForLocation("location-country", displayStatusType.Show);
+                    changeStatusForLocation("location-cities", displayStatusType.Hide, locationType.WithoutLocation);
+                    break;
+                }
+                case locationType.Cities: {
+                    changeStatusForLocation("location-cities", displayStatusType.Show);
+                    changeStatusForLocation("location-country", displayStatusType.Hide, locationType.WithoutLocation);
+                    break;
+                }
+            }
+        }
+
+        function setCorrectValueForLocation(locationType) {
+            $("#LocationType option").each(function (index, elem) {
+                if ($(elem).val() === locationType) {
+                    $(elem).attr('selected', true);
+                }
+            });
+        };
+
+            window.onload = function () {
+                //initialize();
+                changeAdvertisementType();
+                setCorrectValueForLocation("@((int)Model.LocationType)");
+                changeLocationType();
+                adFile.src = '@Model.FilePath';
+                fileField.value = '@Model.FilePath';
+                loadCropper();
+                enableModal('@Model.FilePath');
+            }
+
+            function loadCropper() {
+
+                var image = document.getElementById('modal-image');
+
+                $('#cropModal').on('shown.bs.modal', function () {
+                    cropper = new Cropper(image, {
+                        autoCropArea: 0.5,
+                        ready: function () {
+
+                            // Strict mode: set crop box data first
+                            cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
+                        }
+                    });
+                }).on('hidden.bs.modal', function () {
+                    cropBoxData = cropper.getCropBoxData();
+                    canvasData = cropper.getCanvasData();
+                    cropper.destroy();
+                });
+
+                $("#crop-image-btn").on("click", function () {
+                    var canvas;
+                    if (cropper) {
+                        canvas = cropper.getCroppedCanvas();
+                        $("#file").attr('src', canvas.toDataURL());
+                        fileField.value = canvas.toDataURL();
+                    }
+                });
+        }
+
+        function enableModal(url) {
+            if (typeId === adType.Video) {
+                $("#file").show();
+                $("#file").off("click");
+            }
+            else if (typeId == adType.Image) {
+                $("#file").on("click", function () {
+                    var modalImage = document.getElementById('modal-image');
+                    modalImage.src = url;
+                    $("#cropModal").modal('show');
+                });
+            }
+        }
+
+            input.onchange = function (ev) {
+                console.log(ev.target.files);
+                var file = ev.target.files[0];
+                var reader = new FileReader();
+                var blobUrl = URL.createObjectURL(file);
+                reader.readAsDataURL(file)
+                reader.onloadend = function () {
+                    fileField.value = reader.result;
+                }
+                fileField.value = reader.result;
+                adFile.src = blobUrl;
+                enableModal(blobUrl);
+            };
+
+
+            $('.multi-select').multiselect({
+                buttonContainer: '<div id="dropdown-butt" class="form-control form-control-lg" />',
+                buttonClass: 'btn dropdown-button',
+                maxHeight: 300
+            });
+
+            $("#Type").on("change", function () {
+                changeAdvertisementType();
+        });
+
+        $("#LocationType").on("change", function () {
+            changeLocationType();
+        });
+
+        function displayCount(id, currentCount, neededCount) {
+            var leftCount = neededCount - currentCount;
+            $("#" + id).text(leftCount);
+        }
+
+        $("#Headline").on("keyup", function (e) {
+            var currentCount = $(this).val().length;
+            if (currentCount < 0) {
+                e.preventDefault();
+            }
+            else {
+                displayCount("headline-character-counter", currentCount, headlineMaxCount);
+            }
+        });
+
+        $("#Headline").on("keydown", function (e) {
+            var currentCount = $(this).val().length;
+            if (currentCount < 0) {
+                e.preventDefault();
+            }
+            else {
+                displayCount("headline-character-counter", currentCount, headlineMaxCount);
+            }
+        });
+
+        $("#Text").on("keyup", function (e) {
+            var currentCount = $(this).val().length;
+            if (currentCount < 0) {
+                e.preventDefault();
+            }
+            else {
+                displayCount("text-character-counter", currentCount, textMaxCount);
+            }
+        });
+
+        $("#Text").on("keydown", function (e) {
+            var currentCount = $(this).val().length;
+            if (currentCount < 0) {
+                e.preventDefault();
+            }
+            else {
+                displayCount("text-character-counter", currentCount, textMaxCount);
+            }
+        });
+
+
+
+    </script>
+}

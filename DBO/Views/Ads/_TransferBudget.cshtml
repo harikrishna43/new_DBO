@@ -1,0 +1,126 @@
+﻿@model DBO.Data.ViewModels.TransferBudgetViewModel
+<div class="modal-header">
+    <h5 class="modal-title">@ResourceString.Instance.TransferBudget @(ResourceString.Instance.For.ToLower()) @(ResourceString.Instance.Advertisemet.ToLower())</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="alert alert-danger" role="alert">
+                    @Model.ErrorMessage
+                </div>
+            </div>
+        </div>
+    }
+
+    <form id="transfer-form">
+        @Html.HiddenFor(m => m.CurrentAdId)
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="row">
+            <div class="col-sm-12 mt-3">
+                <div class="form-group row">
+                    <div class="col-sm-6" style="float:left">
+                        <input type="radio" id="transferToAnother" name="TransferToAnother" value="True" checked />
+                        <label class="form-check-label" for="customControlAutosizing">@ResourceString.Instance.TransferToAnother <br /></label>
+                    </div>
+                    @if (!Model.RemainingBudget.HasValue)
+                    {
+                        <div class="col-sm-6" style="float:right">
+                            <input type="radio" id="transferToCurrent" name="TransferToAnother" value="False" />
+                            <label class="form-check-label" for="customControlAutosizing">@ResourceString.Instance.TransferToCurrent<br /></label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top:25px;">
+            <div class="col-sm-12">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label mt-1" id="optional-label"></label>
+                    <div class="col-sm-4">
+                        @{
+                            string optionalText = String.Format("- {0} -", ResourceString.Instance.Select.ToLower());
+                        }
+                        @Html.DropDownList("SelectedAdvertisementId", (List<SelectListItem>)ViewBag.ListOfAds, optionalText, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.SelectedAdvertisementId, string.Empty, new { @class = "text-danger", style = "font-size:12px;" })
+                    </div>
+                    <label class="col-sm-2 col-form-label mt-1"><b>@ResourceString.Instance.Amount:</b></label>
+                    <div class="col-sm-2">
+                        @Html.TextBox("Amount", Model.RemainingBudget.HasValue ? (decimal?)Model.RemainingBudget.Value : null, new { @class = "form-control", type = "number", step = "0.1" })
+                        @Html.ValidationMessageFor(m => m.Amount, string.Empty, new { @class = "text-danger", style = "font-size:12px;" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="submit-transfer" type="button" class="btn btn-primary">@ResourceString.Instance.Transfer</button>
+            @if (!Model.RemainingBudget.HasValue)
+            {
+                <button type="button" class="btn btn-danger" data-dismiss="modal">@ResourceString.Instance.Cancel</button>
+            }
+        </div>
+    </form>
+</div>
+
+<script>
+    function changeOptionStatus() {
+
+        var optionalLabelText = "";
+        if ($("#transferToAnother").is(":checked")) {
+            optionalLabelText = "@(ResourceString.Instance.To):";
+        }
+        else {
+            optionalLabelText = "@(ResourceString.Instance.From):";
+        }
+        $("#optional-label").text(optionalLabelText).css("font-weight", "Bold");;
+    }
+
+    $(document).ready(function () {
+        changeOptionStatus();
+    });
+
+    $('input[type=radio][name=TransferToAnother]').change(function () {
+        changeOptionStatus();
+    });
+
+    $("#submit-transfer").click(function () {
+        var currentAdId = $("#CurrentAdId").val();
+        var selectedAdvertisementId = $("#SelectedAdvertisementId").val();
+        var amount = $("#Amount").val();
+        var transferToAnother = $("#transferToAnother").is(":checked");
+        var token = $('input[name="__RequestVerificationToken"]', $('#transfer-form')).val();
+        var dataToSend = {
+            currentAdId: currentAdId,
+            transferToAnother: transferToAnother,
+            amount: amount,
+            selectedAdvertisementId: selectedAdvertisementId
+        };
+        var dataWithAntiforgeryToken = $.extend(dataToSend, { '__RequestVerificationToken': token });
+        $.ajax({
+            url: "/Ads/TransferBudget",
+            type: "POST",
+            data: dataWithAntiforgeryToken,
+            success: function (data) {
+                if (data.Success == true) {
+                    if ("@Model.RemainingBudget.HasValue" === "True") {
+                        $("#transferBudgetModal").modal("hide");
+                        window.location.href = "@Url.Action("Index","Ads")";
+                    } else {
+                        $("#transferBudgetModal").modal("hide");
+                    }
+
+                }
+                else
+                    $("#transferBudgetModal_pl").html(data);
+            }
+        });
+    });
+
+
+</script>
+

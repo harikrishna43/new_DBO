@@ -1,0 +1,43 @@
+﻿@model IEnumerable<DBO.Data.Models.ApplicationUser>
+
+<p class="card-title"> @ResourceString.Instance.Employees</p>
+<div class="card-text ">
+    @foreach (var employee in Model)
+    {
+        <div class="col-md-12" style="display:inline-block">
+            <a data-userid="@employee.Id" data-companyid="@employee.CompanyId" class="update-employee"><span class="fa fa-2x fa-edit pull-right"></span></a>
+            <div class="col-md-5" style="float:left">
+                <p>
+                    @employee.UserName
+                </p>
+                <p>
+                    @employee.Roles.Count
+                </p>
+            </div>
+            <div class="col-md-5" style="float:left">
+                <img src="https://picsum.photos/70/70" width="70" ight="70" style="border-radius: 50px;">
+            </div>
+        </div>
+    }
+    <hr />
+    <div class="col-md-12">
+        <a href="#" data-toggle="modal" data-target="#employeeModal" onclick="createEmployee('@ViewBag.CompanyId')">@((string)ResourceString.Instance.CreateNewEmployee)</a>
+    </div>
+</div>
+
+<script>
+    $(".update-employee").click(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Employees/Update/",
+            data: {
+                userId: $(this).attr('data-userid'),
+                companyId: $(this).attr('data-companyid')
+            },
+            success: function (data) {
+                $("#employeeModal_body").html(data);
+                $("#employeeModal").modal('show');
+            }
+        });
+    });
+</script>

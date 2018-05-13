@@ -1,0 +1,113 @@
+﻿@model IEnumerable<DBO.Data.ViewModels.NewsViewModel>
+@using DBO.Data.Repositories;
+@using DBO.Extensions;
+
+<div id="company-news">
+    @foreach (var news in Model)
+    {
+        <div class="container__news news">
+            <div class="box box__news">
+                <div class="">
+                    <div class="box__headline">
+                        @if (!string.IsNullOrEmpty(news.Company.Image))
+                        {
+                            <img src="~/img/CompanyLogos/@news.Company.Image" style="max-width: 30%;" />
+                        }
+                        else
+                        {
+                            <span class="pull-right news__date">@news.CreatedAt.ToString("ddd dd-MM-yyyy hh:mm")</span>
+                            <p class="">@news.Company.Name</p>
+                        }
+                    </div>
+
+                    <h4 style="display:block">@news.Title</h4>
+                    <div class="">
+                        @if (news.IsLargeNews)
+                        {
+                            <p class=" short-content-@news.Id">
+
+                                @news.ShortContent ...
+                                <br />
+                                <a href="#" class="news__readmore btn btn-green btn-sm btn-no-radius" onclick="readMore(this);return false;" data-news-id="@news.Id">@ResourceString.Instance.ReadMoreLink </a>
+
+                            </p>
+                            <p class="news-content full-content-@news.Id" style="display:none;">
+                                @news.Content
+                                @if (!string.IsNullOrEmpty(news.ImagePath))
+                                {
+                                    <img src="/NewsImages/@news.ImagePath" class="img-fluid" />
+                                }
+                                @*<p class="news-signature">
+                                        @news.Company.Name, @news.User.UserName
+                                    </p>*@
+                            </p>
+                        }
+                        else
+                        {
+                            <p>
+                                @news.Content
+                            </p>
+                            if (!string.IsNullOrEmpty(news.ImagePath))
+                            {
+                                <img src="/NewsImages/@news.ImagePath" class="img-fluid" />
+                            }
+                            @*<p class="news-signature">
+                                    @news.Company.Name, @news.Title, @news.User.UserName
+                                </p>*@
+                        }
+                    </div>
+
+                    <div class="news__stats">
+                        <p>
+                            <span class="views"> @news.Views @ResourceString.Instance.Views</span> &middot; <span id="comments" style="cursor: pointer;" onclick="showComments(this)" data-news-id="@news.Id">@news.Comments.Count @ResourceString.Instance.Comments</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            @foreach (var comment in news.Comments)
+            {
+                <div class="box box__comment comment-@news.Id">
+                    <div class="">
+                        <p>
+                            <span class="pull-right" style="font-size:11px;">@comment.CreatedAt.ToShortDateString()</span>
+                            <br />
+                            @comment.Content
+                        </p>
+                        <p class="news-signature">
+                            @if (comment.User.Company != null)
+                            {
+                                <span>
+                                    @comment.User.Company.Name
+                                    @if (!string.IsNullOrEmpty(comment.User.Company.Title))
+                                    {
+                                        <text>,</text> @comment.User.Company.Title
+                                    }
+                                    @*@comment.User.UserName*@
+                                </span>
+                            }
+                            else
+                            {
+                                @comment.User.UserName
+                            }
+                        </p>
+                    </div>
+                </div>
+            }
+
+            @if ((!string.IsNullOrEmpty(User.GetClaimValue("Id")) || User.IsInRole("Admin")) && news.IsCommentAllowed)
+            {
+                <div class="card  comment-form">
+                    <div class="card-block">
+                        @using (Html.BeginForm("AddComment", "News", new { companyId = news.CompanyId }, FormMethod.Post))
+                        {
+                            <input type="hidden" name="NewsId" value="@news.Id" />
+                            <input type="hidden" name="CompanyId" value="@news.CompanyId" />
+                            @Html.AntiForgeryToken()
+                            <textarea data-autoresize placeholder="@ResourceString.Instance.LeaveAComment" style="resize:none" name="content" rows="1" required onkeypress="return postOnEnter(event, this)"></textarea>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

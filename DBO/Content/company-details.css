@@ -1,0 +1,556 @@
+﻿body {
+    background-color: #F3F3F3;
+}
+
+    .company-details hr {
+        margin-top: 5px;
+        margin-bottom: 10px;
+        width: 100%;
+        float: left;
+    }
+
+    .company-details .row > div {
+        min-height: 640px;
+        margin-bottom: 20px;
+    }
+
+.title-strikethrough {
+    overflow: hidden;
+    text-align: center;
+    color: lightgray;
+}
+
+/* Logo */
+.company-details .company-logo {
+    margin: 1em;
+    padding: 0;
+}
+
+/* Title strikethrough*/
+.news-section {
+    
+}
+
+
+.title-strikethrough {
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    font-size: 10px;
+    color: #D4D7D9;
+    font-weight: lighter;
+}
+
+    .title-strikethrough:before,
+    .title-strikethrough:after {
+        outline-color: lightgray;
+        background-color: #000;
+        content: "";
+        display: inline-block;
+        height: 1px;
+        position: relative;
+        vertical-align: middle;
+        width: 50%;
+        background-color: #ccc;
+    }
+
+    .title-strikethrough:before {
+        right: 0.5em;
+        margin-left: -50%;
+    }
+
+    .title-strikethrough:after {
+        left: 0.5em;
+        margin-right: -50%;
+    }
+
+/* Connections */
+.company-details .connections {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+    .company-details .connections span {
+        color: #8dc53f;
+        font-size: 24px;
+    }
+
+    .company-details .connections p {
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+/* Skills */
+.company-details .skills {
+    text-transform: uppercase;
+}
+
+    .company-details .skills ul {
+        color: lightgray;
+        list-style: none;
+        width: 100%;
+        display: inline-block;
+        padding-left: 0;
+        padding-bottom: 15px;
+    }
+
+        .company-details .skills ul li {
+            width: 33%;
+            max-width: 33%;
+            text-align: center;
+            font-size: 10px;
+            float: left;
+            color: gray;
+        }
+
+/* Google maps */
+.company-details .google-maps {
+    position: relative;
+    padding-bottom: 100%;
+    margin: -15px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+    .company-details .google-maps iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+/* Contact details */
+
+.company-details {
+    padding-top: 10px;
+}
+.company-details .contact {
+    margin-bottom: 20px;
+    margin-left: 10%;
+    font-size: 0.8em;
+    ;
+}
+
+    .company-details .contact i {
+        margin-right: 20px;
+        padding-top: 6px;
+        font-size: 1.2em;
+    }
+
+    .company-details .contact div {
+        float: left;
+    }
+
+.company-details .connection-logo {
+    margin: 10px;
+}
+
+
+.add-article {
+    font-family: 'Segoe UI';
+}
+    /* Add article form*/
+    .add-article .body {
+        color: lightgray;
+        
+    }
+
+    .add-article .header {
+        background-color: #ECEBEB;
+    }
+
+.company-details .add-article .body textarea {
+    width: 100%;
+    border: none;
+    resize: vertical;
+    padding-top: 10px;
+    padding-left: 30px;
+}
+
+.company-details .add-article .body .title {
+    width: 100%;
+    border: none;
+    padding-top: 10px;
+    padding-left: 30px;
+}
+
+.company-details .add-article .body textarea :-moz-placeholder {
+    color: #B9B7B7;
+}
+
+
+.company-details .add-article .body span {
+    padding: 0;
+    font-size: 0.8em;
+}
+
+.company-details .add-article .body button {
+    text-align: center;
+    height: 38px;
+}
+
+/* Article */
+.company-details .company-article {
+    margin-bottom: 25px;
+}
+
+.company-details .company-article p,
+.company-details .company-article h4{
+   padding:0;
+   margin:0;
+}
+
+.company-details .company-article .company-article-data {
+    padding: 10px 30px 10px 30px;
+}
+
+.company-details .company-article .company-article-data .company-article-data-header {
+    width:100%;
+    display:inline-block;
+    color: #818080;
+}
+
+.company-details .company-article .company-article-data .company-article-data-header .news-company-title {
+    width: 50%;
+    font-size: 16px;
+    float: left;
+}
+
+.company-details .company-article .company-article-data .company-article-data-header .news-date {
+    font-size: 12px;
+    float: right;
+    position: static;
+}
+
+.company-details .company-article .company-article-data .news-title {
+    font-size: 16px;
+    color:#070707;
+}
+.news-signature {
+    font-size: 14px;
+    color:#818080;
+}
+
+.company-details .company-article .company-article-data .news-content {
+    font-size: 14px;
+    color: #484343;
+}
+
+.company-details .company-article .article-footer {
+    font-size: 0.8em;
+    color: #818080;
+    padding-left: 15px;
+}
+
+.company-details .company-article .comment-form {
+    margin-top:5px;
+}
+
+.company-details .company-article .article-footer .views {
+        margin-right: 10px;
+    }
+
+.company-details .company-article .article-footer .views::after {
+            margin-left: 10px;
+            content: '\2022';
+            display: inline-block;
+        }
+
+.company-details .comment-form textarea {
+    width: 100%;
+    border: none;
+    padding-left: 24px;
+    padding-top: 10px;
+    resize: vertical;
+}
+
+/* Comments */
+
+.company-details .comment {
+    margin: 5px 0px 0px 0px;
+    padding: 7px 15px 2px 30px;
+    display: none
+}
+
+/* Connections */
+
+.company-details .add-connection {
+    text-align: center;
+    padding: 15px 0 21px 0;
+}
+
+/* Claimed details */
+
+.setting-revision {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.text-inside {
+    color: #B9B7B7;
+    font-size: 17px;
+    text-align: left;
+    max-width: 439px;
+    margin-top: 25px;
+}
+
+#revision-btn {
+    font-family: 'Segoe UI Semibold';
+    font-size: 14px;
+    border-radius: 0;
+    margin-top: 39px;
+    margin-bottom: 27px;
+}
+
+#bottom-text{
+    margin-top:20px;
+}
+
+#submit_info_btn {
+    font-family: 'Segoe UI Semibold';
+    font-size: 14px;
+    border-radius: 0;
+    margin-bottom: 27px;
+
+}
+
+
+.contact-div {
+    padding-bottom: 5px;
+}
+
+#form0 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+text {
+    color: #313030;
+    font-size: small;
+}
+
+.revision-form {
+    margin-top: 16px;
+    align-content: center;
+}
+
+.revision-form btn {
+    margin-top: 16px;
+    align-content: center;
+
+}
+
+#form-btn {
+    border-radius: 0;
+    font-size: 0.8em;
+    margin-top: 7px;
+    height: 38px;
+    margin-left: -14px;
+    margin-right: 32px;
+    margin-bottom: 39px;
+}
+
+.text-right-info {
+    margin: 14px 26px 0px 18px;
+}
+
+.right-text-list > li {
+    margin-top: 10px;
+    margin-left: -25px;
+    list-style-type: none;
+}
+
+.right-text-list li:before {
+    content: '-';
+    position: absolute;
+    margin-left: -20px;
+}
+
+.contact-div {
+    margin-left: -15px;
+}
+
+.email-div {
+    margin-left: -15px;
+}
+
+/* ClaimCompany */
+
+.register-top {
+    margin: 16px 69px 0px 13px;
+}
+
+.register-company-info {
+    color: black;
+    font-size: 14px;
+    margin: 16px 69px 0px 13px;
+}
+
+    .register-company-info > p {
+        color: black;
+        font-size: 12px;
+    }
+
+.share-mail {
+    margin: 16px 59px 0px 13px;
+}
+
+.confirm-information {
+    margin: 16px 59px 0px 13px;
+}
+
+#revision-btn-confirm {
+    margin-bottom: 28px;
+    height: 38px;
+    margin-left: 16px;
+    margin-top: 32px;
+}
+
+/* Overlay */
+
+.overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+
+    .overlay .overlay-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 50px;
+        color: white;
+        transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+    }
+
+/* Validation messages */
+.validation-error-message {
+    margin-left: 1px;
+    font-size: 14px;
+}
+
+.company-navigation{
+    width:100%;
+    background: #fff;
+    display:inline-block;
+    font-size:19px;
+}
+
+.company-navigation .company-nav {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.company-navigation ul{
+    padding:20px;
+}
+
+.company-navigation ul li{
+    padding:5px;
+}
+
+.company-navigation ul li a {
+    text-decoration:none;
+    text-transform:uppercase;
+    color:gray;
+}
+
+.card-header {
+    height: auto;
+    font-size: 18px;
+}
+
+
+
+.form-horizontal #Email {
+    margin-bottom: 10px;
+}
+
+#right-sub-btn {
+    width: 106px;
+    border-radius: 0;
+}
+
+
+/* Responsive features */
+
+@media (max-width: 1200px) {
+
+    .form-horizontal #Name {
+        width: 150px;
+    }
+
+    .form-horizontal #Email {
+        width: 150px;
+    }
+  
+}
+
+@media (max-width: 991px) {
+    .form-horizontal #Name {
+        width: 250px;
+    }
+
+    .form-horizontal #Email {
+        width: 250px;
+    }
+}
+
+
+@media (max-width: 767px) {
+    .text-inside {
+        color: #B9B7B7;
+        font-size: 14px;
+        text-align: left;
+        margin-top: 25px;
+    }
+
+    #revision-btn {
+        font-size: 12px;
+
+    }
+
+    .card-header {
+        font-size: 14px;
+        
+    }
+    .card-block {
+        min-height: 180px;
+        height: auto;
+    }
+
+    #form0 {
+        height: auto;
+    }
+
+}
+
+
+@media (max-width: 575px) {
+    #revision-btn {
+        font-size: 11px;
+    }
+}
+
+
+@media (max-width: 490px) {
+    #revision-btn {
+        font-size: 9px;
+    }
+}
+
+    @media (min-width: 991px) {
+        #revision-btn {
+            font-size: 11px;
+        }
+    }

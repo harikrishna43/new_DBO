@@ -1,0 +1,48 @@
+﻿@model IDictionary<string, List<DBO.Data.Models.Resource>>
+@{
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+<style>
+    .table.table-square thead tr th {
+        border: 1px solid gray;
+        color: gray;
+        font-weight: normal;
+    }
+
+    .linkButton {
+        background: none;
+        border: none;
+        color: #007bff;
+        cursor: pointer;
+        background-color: transparent;
+    }
+</style>
+<section class="section-cards pt-3">
+    <div class="container-fluid" style="margin:0;padding:0;">
+        <table class="table table-square">
+            <thead>
+                <tr>
+                    <th>@ResourceString.Instance.Name</th>
+                    <th>@ResourceString.Instance.English</th>
+                    <th>@ResourceString.Instance.Danish</th>
+                    <th align="center"></th>
+                </tr>
+            </thead>
+            <tbody class="card-white px-4 pt-4 w-100">
+                @foreach (var group in Model)
+                {
+                    <tr>
+                        <td>@group.Key</td>
+                        @foreach(var resource in Model[group.Key])
+                        {
+                            <td>@resource.Value</td>
+                        }
+                        <td align="center">
+                            @Html.ActionLink((string)ResourceString.Instance.Edit, "Edit", new { name = group.Key })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
